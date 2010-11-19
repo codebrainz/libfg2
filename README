@@ -1,0 +1,45 @@
+libfg2 - Simple Linux video capture library
+===========================================
+
+Libfg2 is a C library which provides access to video input devices such as
+frame grabber cards, webcams, and TV tuner devices under kernels which support
+Video4Linux2.  Using the excellent libv4l library, libfg2 provides access to 
+most devices, independent of which pixel formats they use.  Libfg2 also 
+provides functions to convert video frames to popular in-memory formats such 
+as those used by Gtk+, SDL, Imlib2, and OpenCV.
+
+The library began with me hacking on the libfg library to support the 
+Video4Linux2 API.  I just started going through each function modifying each
+one to work with V4L2, renaming a few things along the way, and Libfg2 is the
+result.
+
+Libfg2 is not presently ready for distribution since a fair portion of the code
+hasn't been thoroughly tested (or written for that matter), a proper 
+build-system is missing, documentation is incomplete (big surprise!), and the 
+API is not stable at all.
+
+If you want to hack on libfg2 it shouldn't be very difficult.  The code is
+quite simple and the really important stuff is in: 
+    
+    include/libfg2.h 
+    src/capture.c 
+    src/frame.c 
+    src/convert.c
+
+To build libfg2 at present, you'll need SCons besides the usual stuff.  In
+general, the following sequence should work:
+
+    1. Install dependencies
+          Required: libv4l
+          Recommended: JPEGlib
+          Optional: SDL, Gtk+, Imlib2, OpenCV (if you want support for these)
+    2. Checkout source code and 'cd' into source dir
+    3. Run 'scons --help' and check out the "Local Options"
+    4. Run 'scons' (with any desired options)
+    5. Hack and slash (see examples: camview, example, test)
+
+Please send me your hacks.
+
+Libfg2 is licensed under the LGPL, see COPYING.
+
+  - codebrainz
