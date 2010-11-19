@@ -1,0 +1,11 @@
+prefix=/usr
+exec_prefix=${prefix}
+includedir=${prefix}/include
+libdir=${prefix}/lib
+
+Name: libfg2
+Description: A Linux frame grabber library.
+Version: 0.0.1
+Cflags: -I${includedir}
+Libs.private: -ljpeg
+Requires.private: libv4l2
