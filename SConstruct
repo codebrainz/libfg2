@@ -53,6 +53,8 @@ AddOption("--with-sdl", dest="with_sdl", action="store_true", default=False,
     help="Support SDL Surfaces.")
 AddOption("--with-opencv", dest="with_opencv", action="store_true", default=False,
     help="Support OpenCV Images.")
+AddOption("--with-docs", dest="with_docs", action="store_true", default=False,
+    help="Use Doxygen to generate documentation.")
 
 lib_env = Environment()
 conf = Configure(lib_env)
@@ -98,9 +100,12 @@ for pgm in PROGRAM_SOURCE_FILES:
 
 pgm_env.Program(BINNAME("camview"), "camview.c", srcdir=SOURCE_DIR, LIBS=["SDL", "fg2"])
 
-import subprocess
-
-subprocess.call(["doxygen", "Doxyfile"])
+if GetOption("with_docs"):
+    import subprocess
+    if not os.path.exists(os.path.join("share", "doc")):
+        os.makedirs(os.path.join("share","doc"))
+    subprocess.call(["doxygen", "Doxyfile"])
+# todo: add cleanup code
 
 #import distutils.sysconfig
 #py_env = Environment(SWIGFLAGS=['-python'],

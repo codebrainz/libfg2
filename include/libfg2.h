@@ -121,10 +121,10 @@ extern "C" {
 ///
 typedef struct 
 {
-    int left;
-    int top;
-    int width;
-    int height;
+    int left;   ///< Left/x position in pixels
+    int top;    ///< Top/y position in pixels
+    int width;  ///< Width in pixels
+    int height; ///< Height in pixels
     
 } fg_rect;
 
@@ -133,8 +133,8 @@ typedef struct
 ///
 typedef struct
 {
-    unsigned int width;
-    unsigned int height;
+    unsigned int width;     ///< Width in pixels
+    unsigned int height;    ///< Height in pixels
     
 } fg_size;
 
@@ -143,9 +143,9 @@ typedef struct
 ///
 typedef struct
 {
-    char    red;
-    char    green;
-    char    blue;
+    char    red;    ///< Red pixel value
+    char    green;  ///< Green pixel value
+    char    blue;   ///< Blue pixel value
     
 } fg_rgb;
 
@@ -618,6 +618,65 @@ typedef enum {
     FG_COLOR_EFFECTS_SKIN_WHITEN        = 8,
     FG_COLOR_EFFECTS_VIVID              = 9,
 } fg_color_effects;
+
+///
+/// \brief  Check to see if control is valid for the frame grabber.
+///
+/// This function can be used to check whether or not a specific control can
+/// be set or not on the frame grabber.
+///
+/// \param  fg          Frame grabber to check control on.
+/// \param  control_id  The ID of the control to check.
+/// 
+/// \return FG_CONTROL_INVALID if the control is disabled or not supported,
+///         FG_CONTROL_READ_ONLY if the control can only be read, and 
+///         FG_CONTROL_OK if the control can be read or set.
+///
+int fg_check_control(fg_grabber *fg, fg_control_id control_id);
+
+///
+/// \brief  Set control to value.
+///
+/// This function set the specified control to the specified value.  The value
+/// should be between 0 and 65535, and will be scaled to value that the device
+/// actually uses.
+///
+/// \param  fg          Frame grabber to set control value on.
+/// \param  control_id  ID of control to set.
+/// \param  value       Value to set control to.
+///
+/// \return FG_CONTROL_INVALID if the control is disabled or not supported,
+///         FG_CONTROL_READ_ONLY if the control can only be read, and 
+///         FG_CONTROL_OK if the control was set.
+///
+int fg_set_control(fg_grabber *fg, fg_control_id control_id, int value);
+
+///
+/// \brief  Get control value.
+///
+/// This function gets the value of the specified control.  The value will be
+/// between 0 and 65535, and will be scaled to this range from the range that
+/// the device actually uses.
+///
+/// \param  fg          Frame grabber to get control value on.
+/// \param  control_id  ID of the control to get.
+///
+/// \return FG_CONTROL_INVALID if the control is disabled or not supported,
+///         or the value otherwise.
+///
+int fg_get_control(fg_grabber *fg, fg_control_id control_id);
+
+///
+/// \brief  Set controls to default values.
+///
+/// This function resets all supported controls to their default values.
+///
+/// \param  fg      Frame grabber to set control values to defaults on.
+///
+/// \return 0 on success, -1 on failure.
+///
+int fg_default_controls(fg_grabber *fg);
+
 ///
 /// \brief Get value of audio balance.
 ///
@@ -1544,6 +1603,7 @@ int fg_set_white_balance_temp(fg_grabber *fg, int value);
 fg_frame *fg_frame_new(fg_grabber *fg);
 
 //------------------------------------------------------------------------------
+
 /// 
 /// \brief  Free memory used by an existing frame.
 ///
@@ -1553,14 +1613,94 @@ fg_frame *fg_frame_new(fg_grabber *fg);
 /// \param  fr  The frame to release memory from.
 ///
 void fg_frame_release(fg_frame* fr);
+
+//------------------------------------------------------------------------------
+
+///
+/// \brief Free memory used by an existing frame.
+/// 
+/// This function is a synonym for #fg_frame_release().
+///
+/// \param fr  The frame to release memory from.
+///
 void fg_frame_free(fg_frame *fr);
-void *fg_frame_get_data(fg_frame* fr);
-int fg_frame_get_size(fg_frame* fr);
-int fg_frame_get_width(fg_frame* fr);
-int fg_frame_get_height(fg_frame* fr);
+
+//------------------------------------------------------------------------------
+
+///
+/// \brief Gets a pointer to the frame's raw image data.
+///
+/// \param fr  The frame whos data to get a pointer to.
+///
+/// \return Pointer to the frame's data.
+unsigned char *fg_frame_get_data(fg_frame *fr);
+
+//------------------------------------------------------------------------------
+
+///
+/// \brief Get the size of the frame data in bytes.
+///
+/// \param fr  The frame whos data to get the length of.
+///
+/// \return The length of the frame's data in bytes or -1 on error.
+///
+int fg_frame_get_size(fg_frame *fr);
+
+//------------------------------------------------------------------------------
+
+///
+/// \brief Get the horizontal resolution in pixels of the frame.
+///
+/// \param fr The frame whos width to get.
+///
+/// \return The width of the frame or -1 on error.
+///
+int fg_frame_get_width(fg_frame *fr);
+
+//------------------------------------------------------------------------------
+
+///
+/// \brief Get the vertical resolution in pixels of the frame.
+///
+/// \param fr The frame whos height to get.
+///
+/// \return The height of the frame or -1 on error.
+///
+int fg_frame_get_height(fg_frame *fr);
+
+//------------------------------------------------------------------------------
+
+///
+/// \brief Print debugging information for a frame.
+///
+/// \param fg   Frame to print debug info for.
+/// \param fp   File stream to write debug info to.
+///
 void fg_debug_frame(fg_frame *fr, FILE *fp);
+
+//------------------------------------------------------------------------------
+
+///
+/// \brief Copy frame from src to dst.
+///
+/// \param  src Frame to copy.
+/// \param  dst Frame to copy to.
+///
+/// \return 0 on success, -1 on failure.
 int fg_frame_copy(fg_frame *src, fg_frame *dst);
+
+//------------------------------------------------------------------------------
+
+///
+/// \brief Duplicate frame.
+///
+/// \param fr   Frame to make a duplicate of.
+///
+/// \return A new #fg_frame or NULL on error.
+///
 fg_frame *fg_frame_clone(fg_frame *fr);
+
+//------------------------------------------------------------------------------
 
 #ifdef WITH_JPEGLIB
 /// \brief  Save a frame as a JPEG file.
@@ -1581,37 +1721,77 @@ fg_frame *fg_frame_clone(fg_frame *fr);
 ///
 int fg_frame_save(fg_frame* fr, const char* filename);
 #endif
-/** @} */ //end of frame group
-//------------------------------------------------------------------------------
-/** @defgroup frame Frame-related functions
- * These functions pertain to individual frames.
- * @{
- */
  
 #ifdef WITH_SDL
 #include <SDL/SDL.h>
+///
+/// \brief Convert #fg_frame to an SDL_Surface.
+///
+/// This function creates an SDL_Surface whos data (pixels) points to the
+/// data for the #fg_frame.  If the frame is freed, the SDL_Surface's data is
+/// also freed, but not the SDL_Surface.  If the SDL_Surface is freed, the
+/// #fg_frame's data is not freed.
+///
+/// \param fr Frame to convert.
+///
+/// \return An SDL_Surface on success or NULL on error.
+///
 SDL_Surface *fg_frame_to_sdl_surface(fg_frame *fr);
 #endif
 
 #ifdef WITH_GDKPIXBUF
 #include <gdk-pixbuf/gdk-pixbuf.h>
+///
+/// \brief Convert #fg_frame to a GdkPixbuf.
+///
+/// This function creates a GdkPixbuf whos data points to the data for the
+/// #fg_frame.  If the frame is freed, the GdkPixbuf's data is also freed,
+/// but not the GdkPixbuf.  If the GdkPixbuf is freed, the #fg_frame's data
+/// is not freed.
+///
+/// \param  fr Frame to convert.
+///
+/// \return A GdkPixbuf on success or NULL on error.
+///
 GdkPixbuf *fg_frame_to_gdk_pixbuf(fg_frame *fr);
 #endif
 
 #ifdef WITH_IMLIB2
 #include <Imlib2.h>
-static inline int rgb24_to_rgb32(unsigned char *src, int src_len, 
-                                    unsigned char *dst);
+///
+/// \brief  Convert #fg_frame to an Imlib_Image.
+///
+/// This function creates an Imlib_Image with newly allocated data.  The image
+/// data pointed by the Imlib_Image must be freed before the Imlib_Image.  
+/// Freeing the Imlib_Image will not free the data and you will lose the 
+/// pointer to the data if it's not freed before hand.
+///
+/// \param fr Frame to convert.
+///
+/// \return An Imlib_Image on success or NULL on error.
+///
+Imlib_Image *fg_frame_to_imlib2_image(fg_frame *fr);
 #endif
 
 #ifdef WITH_OPENCV
 #include <cv.h>
 #include <highgui.h>
+///
+/// \brief Convert #fg_frame to an IplImage.
+///
+/// This function creates an IplImage whos data points to the data for the
+/// #fg_frame.  If the frame is freed, the IplImage's data is also freed,
+/// but not the IplImage.  If the IplImage is freed, the #fg_frame's data is
+/// not freed.
+///
+/// \param fr Frame to convert.
+///
+/// \return An IplImage on success or NULL on error.
+///
 IplImage *fg_frame_to_ipl_image(fg_frame *fr);
 #endif
 
- /** @} */ // end of convert section
- 
+/** @} */ // end of frame section
  
 #ifdef __cplusplus__
 }

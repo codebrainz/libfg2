@@ -23,8 +23,9 @@ quite simple and the really important stuff is in:
     
     include/libfg2.h 
     src/capture.c 
-    src/frame.c 
+    src/control.c
     src/convert.c
+    src/frame.c 
 
 To build libfg2 at present, you'll need SCons besides the usual stuff.  In
 general, the following sequence should work:

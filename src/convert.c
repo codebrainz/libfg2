@@ -43,7 +43,7 @@ static inline int rgb24_to_rgb32(unsigned char *src, int src_len,
         r = *src++;
         g = *src++;
         b = *src++;
-        // reverse for some reason
+        // reversed
         *dst++ = b;
         *dst++ = g;
         *dst++ = r;
