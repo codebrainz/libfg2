@@ -739,7 +739,7 @@ int fg_grab_frame(fg_grabber *fg, fg_frame *fr)
 }
 
 //--------------------------------------------------------------------------
-
+/*
 int fg_set_control(fg_grabber *fg, int control_id, int value)
 {
     int valid_control = 0;
@@ -859,7 +859,7 @@ int fg_set_saturation(fg_grabber *fg, int sat)
 }
 
 //--------------------------------------------------------------------------
-/*
+
 int fg_set_colour( fg_grabber* fg, int co )
 {
     fg->picture.colour = FG_PERCENT( co );
@@ -880,7 +880,7 @@ int fg_set_color( fg_grabber* fg, int co )
     // This is the proper way to spell it...
     return fg_set_colour( fg, co );
 }
-*/
+
 //--------------------------------------------------------------------------
 
 int fg_set_contrast( fg_grabber* fg, int ct )
@@ -889,7 +889,7 @@ int fg_set_contrast( fg_grabber* fg, int ct )
 }
 
 //--------------------------------------------------------------------------
-/*
+
 int fg_set_whiteness( fg_grabber* fg, int wh )
 {
     fg->picture.whiteness = FG_PERCENT( wh );

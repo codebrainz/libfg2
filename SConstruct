@@ -12,7 +12,7 @@ HEADER_DIR   = "include"
 BINARY_DIR   = "bin"
 BUILD_SHARED = True
 BUILD_STATIC = True
-LIBRARY_SOURCE_FILES    = ["capture.c", "frame.c"]
+LIBRARY_SOURCE_FILES    = ["capture.c", "frame.c", "control.c"]
 PROGRAM_SOURCE_FILES    = ["example.c", "test.c", "fg-udev.c"]
 
 LIBNAME     = lambda n,e: os.path.join(LIBRARY_DIR, "lib%s.%s" % (n, e))
@@ -97,6 +97,10 @@ for pgm in PROGRAM_SOURCE_FILES:
     pgm_env.Program(BINNAME(pgm.replace(".c","")), pgm, srcdir=SOURCE_DIR)
 
 pgm_env.Program(BINNAME("camview"), "camview.c", srcdir=SOURCE_DIR, LIBS=["SDL", "fg2"])
+
+import subprocess
+
+subprocess.call(["doxygen", "Doxyfile"])
 
 #import distutils.sysconfig
 #py_env = Environment(SWIGFLAGS=['-python'],
