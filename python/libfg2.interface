@@ -1,6 +1,0 @@
-%module libfg2
-%{
-#include "include/libfg2.h"
-%}
-
-%include "include/libfg2.h"
