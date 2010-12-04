@@ -13,10 +13,40 @@ Video4Linux2 API.  I just started going through each function modifying each
 one to work with V4L2, renaming a few things along the way, and Libfg2 is the
 result.
 
+Here's a minimal example of use:
+
+    #include <libfg2.h>
+
+    int main(int argc, char *argv[])
+    {
+        
+        /* get name of video device or default */
+        char *device = (argc>1) ? argv[1] : "/dev/video0";
+        
+        /* get name of snapshot file or default */
+        char *snap_file = (argc>2) ? argv[2] : "snapshot.jpg";
+        
+        /* open and initialize the fg_grabber */
+        fg_grabber *fg = fg_open(device);
+        
+        /* allocate a new fg_frame and fill it with data */
+        fg_frame *fr = fg_grab(fg);
+        
+        /* save the fg_frame as a JPEG */
+        fg_frame_save(fr, snap_file);
+        
+        /* free memory for fg_frame */
+        fg_frame_release(fr);
+        
+        /* free memory for fg_grabber and close device */
+        fg_close(fg);
+        
+        return 0;
+    }
+
 Libfg2 is not presently ready for distribution since a fair portion of the code
 hasn't been thoroughly tested (or written for that matter), a proper 
-build-system is missing, documentation is incomplete (big surprise!), and the 
-API is not stable at all.
+build-system is missing and the API is not stable at all.
 
 If you want to hack on libfg2 it shouldn't be very difficult.  The code is
 quite simple and the really important stuff is in: 

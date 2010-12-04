@@ -6,11 +6,13 @@ int main(int argc, char *argv[])
 {   
     char wind_title[256] = {0};
     int quit = 0;
-    SDL_Surface *frame = NULL;
-    SDL_Surface *screen = NULL;
+    
+    SDL_Surface *frame;
+    SDL_Surface *screen;
     SDL_Event event;
-    fg_frame *fr;
+    
     fg_grabber *fg;
+    fg_frame *fr;
 
     if (argc == 1)
         fg = fg_open(FG_DEFAULT_DEVICE);
@@ -39,17 +41,11 @@ int main(int argc, char *argv[])
         }
         
         fg_grab_frame(fg, fr);
-        
-        frame = SDL_CreateRGBSurfaceFrom(fr->data, fr->size.width,
-            fr->size.height, 24, fr->rowstride, 
-#if SDL_BYTEORDER == SDL_LIL_ENDIAN
-            0x000000ff, 0x0000ff00, 0x00ff0000, 0);
-#else
-            0xff000000, 0x00ff0000, 0x0000ff00, 0);
-#endif
+        frame = fg_frame_to_sdl_surface(fr);
             
         SDL_BlitSurface(frame, NULL, screen, NULL);
         SDL_Flip(screen);
+        
         SDL_FreeSurface(frame);
 
     }

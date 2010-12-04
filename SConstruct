@@ -100,6 +100,9 @@ for pgm in PROGRAM_SOURCE_FILES:
 
 pgm_env.Program(BINNAME("camview"), "camview.c", srcdir=SOURCE_DIR, LIBS=["SDL", "fg2"])
 
+if GetOption("with_sdl"):
+    pgm_env.Program(BINNAME("camview-sdl"), "camview-sdl.c", srcdir=SOURCE_DIR, LIBS=["SDL","fg2"])
+
 if GetOption("with_docs"):
     import subprocess
     if not os.path.exists(os.path.join("share", "doc")):
