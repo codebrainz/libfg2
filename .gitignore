@@ -1,26 +1,55 @@
+#
+# .gitignore for libfg2
+# 
 
-# documentation dir
+# Compiled
+*.o
+*.os
+*.so
+*.a
+*.com
+*.class
+*.dll
+*.exe
+*.pyc
+*.lo
+*.la
+
+# Packages
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Logs and db
+*.log
+*.sql
+*.sqlite
+*.dblite
+
+# OS files
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# Shared dir
 share/*
 
-# python bindings
+# New sub-projects
 src/gtkcamera
 src/pyfg2
 
+# Autotools stuff
 
-#pyfg2/bin/*
-#pyfg2/include/*
-#pyfg2/lib/*
+*~
 
-#pyfg2/bin
-#pyfg2/include
-#pyfg2/lib
-
-#pyfg2/pyfg2.c
-
-# autotools stuff
 Makefile
 Makefile.in
-
 src/Makefile
 src/Makefile.in
 
@@ -37,8 +66,6 @@ configure
 config.h
 stamp-h1
 
-*~
-
 install-sh
 libtool
 ltmain.sh
@@ -47,5 +74,3 @@ depcomp
 
 src/.deps
 src/.libs
-*.lo
-*.la

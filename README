@@ -57,17 +57,12 @@ quite simple and the really important stuff is in:
     src/convert.c
     src/frame.c 
 
-To build libfg2 at present, you'll need SCons besides the usual stuff.  In
-general, the following sequence should work:
+To build libfg2 at present, you'll need to do the following:
 
-    1. Install dependencies
-          Required: libv4l
-          Recommended: JPEGlib
-          Optional: SDL, Gtk+, Imlib2, OpenCV (if you want support for these)
-    2. Checkout source code and 'cd' into source dir
-    3. Run 'scons --help' and check out the "Local Options"
-    4. Run 'scons' (with any desired options)
-    5. Hack and slash (see examples: camview, example, test)
+    $ autoreconf
+    $ ./configure [options] # use --help to see options
+    $ make
+    $ make install # as root
 
 Please send me your hacks.
 
