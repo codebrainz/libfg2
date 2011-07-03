@@ -36,8 +36,8 @@
 //
 //==========================================================================
 
-#ifndef H_INCLUDED_LIBFG
-#define H_INCLUDED_LIBFG
+#ifndef LIBFG2_H
+#define LIBFG2_H
 
 #ifdef __cplusplus__
 extern "C" {
@@ -1800,32 +1800,4 @@ IplImage *fg_frame_to_ipl_image(fg_frame *fr);
 }
 #endif /* __cplusplus__ */
 
-#endif /* H_INCLUDED_LIBFG */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#endif /* LIBFG2_H */

@@ -1,3 +1,7 @@
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = src examples
+SUBDIRS = src
+
+if WITH_EXAMPLES
+SUBDIRS += examples
+endif

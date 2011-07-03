@@ -78,7 +78,6 @@ libfg2-config.*
 libfg2.pc
 m4/libtool.m4
 m4/lt*.m4
-jpeg-8c/
 
 snapshot.jpg
 

@@ -146,6 +146,14 @@ AS_IF([test "x$with_vala" = "xyes"], [
 )
 AM_CONDITIONAL([WITH_VALA], [test "x$with_vala" = "xyes"])
 #-------------------------------------------------------------------------------
+# Examples and Tests
+AC_ARG_WITH([examples],
+    AS_HELP_STRING([--with-examples], [build examples and tests]),
+    [with_examples=yes],
+    [with_examples=no]
+)
+AM_CONDITIONAL([WITH_EXAMPLES], [test "x$with_examples" = "xyes"])
+#-------------------------------------------------------------------------------
 
 # TODO: check these
 AC_C_INLINE
