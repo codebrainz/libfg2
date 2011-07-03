@@ -3,6 +3,10 @@
 #include <errno.h>
 #include <linux/videodev2.h>
 
+#ifdef HAVE_CONFIG_H
+#include "libfg2-config.h"
+#endif
+
 #include "libfg2.h"
 
 //--------------------------------------------------------------------------
@@ -15,9 +19,9 @@
 ///
 /// \param  fg          Frame grabber to check control on.
 /// \param  control_id  The ID of the control to check.
-/// 
+///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, and 
+///         FG_CONTROL_READ_ONLY if the control can only be read, and
 ///         FG_CONTROL_OK if the control can be read or set.
 ///
 int fg_check_control(fg_grabber *fg, fg_control_id control_id)
@@ -65,24 +69,24 @@ int fg_check_control(fg_grabber *fg, fg_control_id control_id)
 /// \param  value       Value to set control to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, and 
+///         FG_CONTROL_READ_ONLY if the control can only be read, and
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_control(fg_grabber *fg, fg_control_id control_id, int value)
 {
-    
+
     if (value < 0 || value > 65535)
     {
         fg_debug_error("fg_set_control(): value out of range");
         return FG_CONTROL_OUT_OF_RANGE;
     }
-    
+
     switch (fg_check_control(fg, control_id))
     {
         case FG_CONTROL_INVALID:
             fg_debug_error("fg_set_control(): control not supported");
             return FG_CONTROL_INVALID;
-            
+
         case FG_CONTROL_READ_ONLY:
             fg_debug_error("fg_set_control(): control is read-only");
             return FG_CONTROL_READ_ONLY;
@@ -107,7 +111,7 @@ int fg_set_control(fg_grabber *fg, fg_control_id control_id, int value)
 ///         or the value otherwise.
 ///
 int fg_get_control(fg_grabber *fg, fg_control_id control_id)
-{   
+{
     switch (fg_check_control(fg, control_id))
     {
         case FG_CONTROL_INVALID:
@@ -132,12 +136,12 @@ int fg_default_controls(fg_grabber *fg)
     int i;
     struct v4l2_control ctrl;
     struct v4l2_queryctrl ctrl_info;
-    
+
     FG_CLEAR(ctrl);
-    
+
     for (i=V4L2_CID_BASE; i < V4L2_CID_LASTP1; i++)
     {
-        
+
         ctrl_info.id = i;
         if (v4l2_ioctl(fg->fd, VIDIOC_QUERYCTRL, &ctrl_info) == -1)
         {
@@ -150,16 +154,16 @@ int fg_default_controls(fg_grabber *fg)
                 return -1;
             }
         }
-        
+
         FG_CLEAR(ctrl);
-        
+
         ctrl.id = ctrl_info.id;
         ctrl.value = ctrl_info.default_value;
         if (v4l2_ioctl(fg->fd, VIDIOC_S_CTRL, &ctrl) == -1)
             continue;
-            
+
     }
-    
+
     return 0;
 }
 
@@ -179,16 +183,16 @@ int fg_default_controls(fg_grabber *fg)
 char *fg_get_control_name(fg_grabber *fg, fg_control_id control_id)
 {
     struct v4l2_queryctrl ctrl_info;
-    
+
     FG_CLEAR(ctrl_info);
-    
+
     ctrl_info.id = control_id;
     if (v4l2_ioctl(fg->fd, VIDIOC_QUERYCTRL, &ctrl_info) == -1)
     {
         fg_debug_error("fg_get_control_name(): unable to get control name");
         return NULL;
     }
-    
+
     return strdup(ctrl_info.name);
 }
 
@@ -222,8 +226,8 @@ int fg_get_audio_balance(fg_grabber *fg)
 /// \param  value   Value to set audio balance to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_audio_balance(fg_grabber *fg, int value)
@@ -258,8 +262,8 @@ int fg_get_audio_bass(fg_grabber *fg)
 /// \param  value   Value to set audio bass to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_audio_bass(fg_grabber *fg, int value)
@@ -294,8 +298,8 @@ int fg_get_audio_loudness(fg_grabber *fg)
 /// \param  value   Value to set audio loudness to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_audio_loudness(fg_grabber *fg, int value)
@@ -330,8 +334,8 @@ int fg_get_audio_mute(fg_grabber *fg)
 /// \param  value   Value to set audio mute to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_audio_mute(fg_grabber *fg, int value)
@@ -366,8 +370,8 @@ int fg_get_audio_treble(fg_grabber *fg)
 /// \param  value   Value to set audio treble to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_audio_treble(fg_grabber *fg, int value)
@@ -402,8 +406,8 @@ int fg_get_audio_volume(fg_grabber *fg)
 /// \param  value   Value to set audio volume to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_audio_volume(fg_grabber *fg, int value)
@@ -416,7 +420,7 @@ int fg_set_audio_volume(fg_grabber *fg, int value)
 ///
 /// \brief Get value of auto brightness.
 ///
-/// 
+///
 ///
 /// \param fg     Frame grabber to set auto brightness on.
 ///
@@ -432,14 +436,14 @@ int fg_get_auto_brightness(fg_grabber *fg)
 ///
 /// \brief Set value of auto brightness.
 ///
-/// 
+///
 ///
 /// \param  fg      Frame grabber to set auto brightness on.
 /// \param  value   Value to set auto brightness to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_auto_brightness(fg_grabber *fg, int value)
@@ -474,8 +478,8 @@ int fg_get_auto_gain(fg_grabber *fg)
 /// \param  value   Value to set auto gain to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_auto_gain(fg_grabber *fg, int value)
@@ -510,8 +514,8 @@ int fg_get_auto_hue(fg_grabber *fg)
 /// \param  value   Value to set auto hue to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_auto_hue(fg_grabber *fg, int value)
@@ -546,8 +550,8 @@ int fg_get_auto_white_balance(fg_grabber *fg)
 /// \param  value   Value to set auto white balance to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_auto_white_balance(fg_grabber *fg, int value)
@@ -560,7 +564,7 @@ int fg_set_auto_white_balance(fg_grabber *fg, int value)
 ///
 /// \brief Get value of background color.
 ///
-/// 
+///
 ///
 /// \param fg     Frame grabber to set background color on.
 ///
@@ -576,14 +580,14 @@ int fg_get_background_color(fg_grabber *fg)
 ///
 /// \brief Set value of background color.
 ///
-/// 
+///
 ///
 /// \param  fg      Frame grabber to set background color on.
 /// \param  value   Value to set background color to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_background_color(fg_grabber *fg, int value)
@@ -618,8 +622,8 @@ int fg_get_backlight_compensation(fg_grabber *fg)
 /// \param  value   Value to set backlight compensation to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_backlight_compensation(fg_grabber *fg, int value)
@@ -632,7 +636,7 @@ int fg_set_backlight_compensation(fg_grabber *fg, int value)
 ///
 /// \brief Get value of band stop filter.
 ///
-/// 
+///
 ///
 /// \param fg     Frame grabber to set band stop filter on.
 ///
@@ -648,14 +652,14 @@ int fg_get_band_stop_filter(fg_grabber *fg)
 ///
 /// \brief Set value of band stop filter.
 ///
-/// 
+///
 ///
 /// \param  fg      Frame grabber to set band stop filter on.
 /// \param  value   Value to set band stop filter to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_band_stop_filter(fg_grabber *fg, int value)
@@ -690,8 +694,8 @@ int fg_get_blue_balance(fg_grabber *fg)
 /// \param  value   Value to set blue balance to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_blue_balance(fg_grabber *fg, int value)
@@ -726,8 +730,8 @@ int fg_get_brightness(fg_grabber *fg)
 /// \param  value   Value to set brightness to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_brightness(fg_grabber *fg, int value)
@@ -740,7 +744,7 @@ int fg_set_brightness(fg_grabber *fg, int value)
 ///
 /// \brief Get value of chroma agc.
 ///
-/// 
+///
 ///
 /// \param fg     Frame grabber to set chroma agc on.
 ///
@@ -756,14 +760,14 @@ int fg_get_chroma_agc(fg_grabber *fg)
 ///
 /// \brief Set value of chroma agc.
 ///
-/// 
+///
 ///
 /// \param  fg      Frame grabber to set chroma agc on.
 /// \param  value   Value to set chroma agc to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_chroma_agc(fg_grabber *fg, int value)
@@ -776,7 +780,7 @@ int fg_set_chroma_agc(fg_grabber *fg, int value)
 ///
 /// \brief Get value of color effects.
 ///
-/// 
+///
 ///
 /// \param fg     Frame grabber to set color effects on.
 ///
@@ -792,14 +796,14 @@ int fg_get_color_effects(fg_grabber *fg)
 ///
 /// \brief Set value of color effects.
 ///
-/// 
+///
 ///
 /// \param  fg      Frame grabber to set color effects on.
 /// \param  value   Value to set color effects to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_color_effects(fg_grabber *fg, int value)
@@ -812,7 +816,7 @@ int fg_set_color_effects(fg_grabber *fg, int value)
 ///
 /// \brief Get value of color killer.
 ///
-/// 
+///
 ///
 /// \param fg     Frame grabber to set color killer on.
 ///
@@ -828,14 +832,14 @@ int fg_get_color_killer(fg_grabber *fg)
 ///
 /// \brief Set value of color killer.
 ///
-/// 
+///
 ///
 /// \param  fg      Frame grabber to set color killer on.
 /// \param  value   Value to set color killer to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_color_killer(fg_grabber *fg, int value)
@@ -870,8 +874,8 @@ int fg_get_contrast(fg_grabber *fg)
 /// \param  value   Value to set contrast to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_contrast(fg_grabber *fg, int value)
@@ -906,8 +910,8 @@ int fg_get_do_white_balance(fg_grabber *fg)
 /// \param  value   Value to set do white balance to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_do_white_balance(fg_grabber *fg, int value)
@@ -942,8 +946,8 @@ int fg_get_exposure(fg_grabber *fg)
 /// \param  value   Value to set exposure to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_exposure(fg_grabber *fg, int value)
@@ -978,8 +982,8 @@ int fg_get_gain(fg_grabber *fg)
 /// \param  value   Value to set gain to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_gain(fg_grabber *fg, int value)
@@ -1014,8 +1018,8 @@ int fg_get_gamma(fg_grabber *fg)
 /// \param  value   Value to set gamma to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_gamma(fg_grabber *fg, int value)
@@ -1050,8 +1054,8 @@ int fg_get_hflip(fg_grabber *fg)
 /// \param  value   Value to set hflip to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_hflip(fg_grabber *fg, int value)
@@ -1086,8 +1090,8 @@ int fg_get_hue(fg_grabber *fg)
 /// \param  value   Value to set hue to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_hue(fg_grabber *fg, int value)
@@ -1122,8 +1126,8 @@ int fg_get_power_line_frequency(fg_grabber *fg)
 /// \param  value   Value to set power line frequency to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_power_line_frequency(fg_grabber *fg, int value)
@@ -1158,8 +1162,8 @@ int fg_get_red_balance(fg_grabber *fg)
 /// \param  value   Value to set red balance to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_red_balance(fg_grabber *fg, int value)
@@ -1172,7 +1176,7 @@ int fg_set_red_balance(fg_grabber *fg, int value)
 ///
 /// \brief Get value of rotate.
 ///
-/// 
+///
 ///
 /// \param fg     Frame grabber to set rotate on.
 ///
@@ -1188,14 +1192,14 @@ int fg_get_rotate(fg_grabber *fg)
 ///
 /// \brief Set value of rotate.
 ///
-/// 
+///
 ///
 /// \param  fg      Frame grabber to set rotate on.
 /// \param  value   Value to set rotate to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_rotate(fg_grabber *fg, int value)
@@ -1230,8 +1234,8 @@ int fg_get_saturation(fg_grabber *fg)
 /// \param  value   Value to set saturation to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_saturation(fg_grabber *fg, int value)
@@ -1266,8 +1270,8 @@ int fg_get_sharpness(fg_grabber *fg)
 /// \param  value   Value to set sharpness to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_sharpness(fg_grabber *fg, int value)
@@ -1302,8 +1306,8 @@ int fg_get_vflip(fg_grabber *fg)
 /// \param  value   Value to set vflip to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_vflip(fg_grabber *fg, int value)
@@ -1338,8 +1342,8 @@ int fg_get_white_balance_temp(fg_grabber *fg)
 /// \param  value   Value to set white balance temp to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, 
-///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or 
+///         FG_CONTROL_READ_ONLY if the control can only be read,
+///         FG_CONTROL_OUT_OF_RANGE if the value is out of range or
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_white_balance_temp(fg_grabber *fg, int value)

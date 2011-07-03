@@ -17,7 +17,7 @@
 //
 //==========================================================================
 
-/* 
+/*
  * none of this was really tested at all yet!
  * need colorspace conversion functions from testoverlay.c and/or elsewhere
  */
@@ -25,18 +25,22 @@
 #include <stdlib.h>
 #include <assert.h>
 
+#ifdef HAVE_CONFIG_H
+#include "libfg2-config.h"
+#endif
+
 #include "libfg2.h"
 
 //------------------------------------------------------------------------------
-#ifdef WITH_IMLIB2 || WITH_OPENCV
+#if (defined(WITH_IMLIB2) && WITH_IMLIB2 == 1) || (defined(WITH_OPENCV) && WITH_OPENCV == 1)
 #include <Imlib2.h>
-static inline int rgb24_to_rgb32(unsigned char *src, int src_len, 
+static inline int rgb24_to_rgb32(unsigned char *src, int src_len,
                                     unsigned char *dst)
 {
     int num_pixels = src_len / 3;
     register int i;
     register DATA32 a,r,g,b;
-    
+
     for (i=0; i < num_pixels; i++)
     {
         a = 0;
@@ -49,7 +53,7 @@ static inline int rgb24_to_rgb32(unsigned char *src, int src_len,
         *dst++ = r;
         *dst++ = a;
     }
-    
+
     return 0;
 }
 #endif
@@ -63,14 +67,14 @@ SDL_Surface *fg_frame_to_sdl_surface(fg_frame *fr)
         fg_debug_error("fg_frame_to_sdl_surface(): wrong frame format");
         return NULL;
     }
-        
-    SDL_Surface *frame;   
-     
-    frame = SDL_CreateRGBSurfaceFrom(fr->data, 
+
+    SDL_Surface *frame;
+
+    frame = SDL_CreateRGBSurfaceFrom(fr->data,
             fr->size.width,
-            fr->size.height, 
-            24, 
-            fr->rowstride, 
+            fr->size.height,
+            24,
+            fr->rowstride,
 #if SDL_BYTEORDER == SDL_LIL_ENDIAN
             0x0000ff, 0x00ff00, 0xff0000,
 #else
@@ -90,7 +94,7 @@ GdkPixbuf *fg_frame_to_gdk_pixbuf(fg_frame *fr)
         fg_debug_error("fg_frame_to_gdk_pixbuf(): wrong frame format");
         return NULL;
     }
-    
+
     GdkPixbuf *pb = gdk_pixbuf_new_from_data(
         fr->data,
         GDK_COLORSPACE_RGB, 0, 8,
@@ -110,32 +114,32 @@ Imlib_Image *fg_frame_to_imlib2_image(fg_frame *fr)
         fg_debug_error("fg_frame_to_imlib2_image(): wrong frame format");
         return NULL;
     }
-    
+
     int num_pixels;
     int dst_length;
     unsigned char *data;
     Imlib_Image *image;
-    
+
     num_pixels = fr->length / 3;
     dst_length = num_pixels * sizeof(DATA32) * 4;
-    
+
     data = malloc(dst_length);
     assert(data != NULL);
 
     rgb24_to_rgb32(fr->data, fr->length, data);
-        
-    *image = imlib_create_image_using_data(fr->size.width, fr->size.height, 
+
+    *image = imlib_create_image_using_data(fr->size.width, fr->size.height,
             (DATA32 *)data);
 
     assert(*image);
-    
-    return image;    
+
+    return image;
 }
 #endif
 //------------------------------------------------------------------------------
+#if 0
 #ifdef WITH_OPENCV
 #include <cv.h>
-#include <highgui.h>
 IplImage *fg_frame_to_ipl_image(fg_frame *fr)
 {
 
@@ -147,23 +151,20 @@ IplImage *fg_frame_to_ipl_image(fg_frame *fr)
 
     unsigned char *img32;
     IplImage *image;
-    
-    img32 = iplMalloc(fr->width * fr->height * 4);
-    
+
+    img32 = iplMalloc(fr->size.width * fr->size.height * 4);
+
     rgb24_to_rgb32(fr->data, fr->length, img32);
-    
-    image = cvCreateImage(cvSize(fr->size.width, fr->size.height), 
+
+    image = cvCreateImage(cvSize(fr->size.width, fr->size.height),
                 IPL_DEPTH32S, 4);
-    
+
     cvSetImageData(img32, fr->data, fr->rowstride);
-    
+
     return image;
 }
 #endif
-
-
-
-
+#endif /* if 0 */
 
 
 

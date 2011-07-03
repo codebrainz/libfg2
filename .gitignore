@@ -1,6 +1,6 @@
 #
 # .gitignore for libfg2
-# 
+#
 
 # Compiled
 *.o
@@ -74,3 +74,8 @@ depcomp
 
 src/.deps
 src/.libs
+libfg2-config.*
+libfg2.pc
+m4/libtool.m4
+m4/lt*.m4
+jpeg-8c/

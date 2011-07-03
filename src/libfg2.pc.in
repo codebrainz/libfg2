@@ -1,11 +1,13 @@
-prefix-@prefix@
+prefix=@prefix@
 exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: libfg2
+Name: @PACKAGE_NAME@
 Description: Linux frame grabbing library.
-Requires: 
+Requires:
+Requires.private: @PKGCONFIG_REQUIRES_PRIVATE@
 Version: @PACKAGE_VERSION@
 Libs: -L${libdir} -lfg2
+Libs.private: @PKGCONFIG_LIBS_PRIVATE@
 Cflags: -I${includedir}

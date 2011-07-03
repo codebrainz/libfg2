@@ -8,9 +8,9 @@
 //==========================================================================
 //
 //  libfg2 - Frame Grabber interface for Linux
-//  
+//
 //--------------------------------------------------------------------------
-//  This library is based heavily on libfg, but with many (all?) parts 
+//  This library is based heavily on libfg, but with many (all?) parts
 //  re-written to support Video4Linux2 and some different functionality.
 //
 //  libfg - Frame Grabber interface for Linux
@@ -46,6 +46,10 @@ extern "C" {
 #include <sys/time.h>
 #include <linux/videodev2.h>
 #include <libv4l2.h>
+
+#ifdef HAVE_CONFIG_H
+#include "libfg2-config.h"
+#endif
 
 ///
 /// Standard/default device for fg_open().
@@ -119,13 +123,13 @@ extern "C" {
 ///
 /// Represents rectangular dimension.
 ///
-typedef struct 
+typedef struct
 {
     int left;   ///< Left/x position in pixels
     int top;    ///< Top/y position in pixels
     int width;  ///< Width in pixels
     int height; ///< Height in pixels
-    
+
 } fg_rect;
 
 ///
@@ -135,7 +139,7 @@ typedef struct
 {
     unsigned int width;     ///< Width in pixels
     unsigned int height;    ///< Height in pixels
-    
+
 } fg_size;
 
 ///
@@ -146,7 +150,7 @@ typedef struct
     char    red;    ///< Red pixel value
     char    green;  ///< Green pixel value
     char    blue;   ///< Blue pixel value
-    
+
 } fg_rgb;
 
 typedef struct v4l2_capability  fg_caps;
@@ -202,7 +206,7 @@ typedef struct
 /// \fn void fg_debug(const char *fmt, ...)
 /// \brief	Write debugging information
 ///
-/// This function behaves like printf if DEBUG is defined, otherwise it 
+/// This function behaves like printf if DEBUG is defined, otherwise it
 /// writes to syslog with LOG_DEBUG mode.
 ///
 /// \param  fmt     Format string to format varargs with.
@@ -229,7 +233,7 @@ void fg_debug_error(const char *fmt, ...);
 ///
 /// \brief  Write all kinds of debugging output to standard output.
 ///
-/// This function just prints a bunch of relevant and useful debugging 
+/// This function just prints a bunch of relevant and useful debugging
 /// messages to standard output.
 ///
 /// \param  fg      Framegrabber to dump info for.
@@ -248,7 +252,7 @@ void fg_dump_info( fg_grabber* fg );
 /// \param  dev     Path to the Video4Linux2 character device (ex. /dev/video0)
 ///                 or the default device (FG_DEFAULT_DEVICE).
 ///
-/// \return If the device can be successfully opened and initialized then a 
+/// \return If the device can be successfully opened and initialized then a
 ///         fg_grabber is returned fully configured.  In case of any errors
 ///         NULL is returned.
 ///
@@ -271,7 +275,7 @@ void fg_close(fg_grabber *fg);
 ///
 /// This function sets the input number on the frame grabber device to the
 /// specified index.  The index specified must be between 0 and fg->num_inputs.
-/// 
+///
 /// \param  fg      Frame grabber device to set input on.
 /// \param  index   Input number to switch to.
 ///
@@ -298,7 +302,7 @@ int fg_get_input(fg_grabber *fg);
 ///
 /// \brief  Grab a new frame from the frame grabber.
 ///
-/// This function allocates a new fg_frame and loads it with the image 
+/// This function allocates a new fg_frame and loads it with the image
 /// captured from the frame grabber device.  The frame returned must be
 /// destroyed with the fg_frame_release() function afterwards.
 ///
@@ -373,7 +377,7 @@ int fg_set_input(fg_grabber* fg, int index);
 ///
 /// \brief  Get the name of an input.
 ///
-/// This function gets the name of the video input.  This information is 
+/// This function gets the name of the video input.  This information is
 /// intended for the user, preferably the connector label on the device itself.
 ///
 /// \param  fg      Frame grabber to get the input name on.
@@ -394,7 +398,7 @@ char *fg_get_input_name(fg_grabber *fg, int index);
 /// \param  fg      The frame grabber to get the input type on.
 /// \param  index   The input number to get the type of.
 ///
-/// \return One of FG_INPUT_TYPE_TUNER or FG_INPUT_TYPE_TUNER on success, 
+/// \return One of FG_INPUT_TYPE_TUNER or FG_INPUT_TYPE_TUNER on success,
 /// or -1 if an error occurred.
 ///
 int fg_get_input_type( fg_grabber* fg, int index );
@@ -418,13 +422,13 @@ int fg_set_channel(fg_grabber* fg, float freq);
 //------------------------------------------------------------------------------
 ///
 /// \brief  Get the frequency of a tuner.
-/// 
+///
 /// This function gets the currently tuned frequency on a tuner on the current
 /// video input in MHz.
-/// 
+///
 /// \param  fg  The frame grabber with the tuner to get the frequency of.
 ///
-/// \return On success, the current frequency is returned or -1 if an error 
+/// \return On success, the current frequency is returned or -1 if an error
 ///         occurred.
 ///
 /// @todo   Test this function and check scaling and such (copied from libfg).
@@ -444,7 +448,7 @@ float fg_get_channel( fg_grabber* fg );
 ///
 /// \param  fg      The frame grabber to set the format on.
 /// \param  fmt     The video format to set.
-/// 
+///
 /// \return On success, 0 is returned or -1 is returned if an error occurred.
 ///
 int fg_set_format(fg_grabber *fg, int fmt);
@@ -454,12 +458,12 @@ int fg_set_format(fg_grabber *fg, int fmt);
 /// \brief  Get the selected video format.
 ///
 /// This function gets the currently selected video input format.  The format
-/// is one of FG_FORMAT_RGB24, FG_FORMAT_BGR24, FG_FORMAT_YUV420, or 
+/// is one of FG_FORMAT_RGB24, FG_FORMAT_BGR24, FG_FORMAT_YUV420, or
 /// FG_FORMAT_YVU420.
 ///
 /// \param  fg  The frame grabber to set the format on.
 ///
-/// \return On success one of FG_FORMAT_* is returned or -1 if an error 
+/// \return On success one of FG_FORMAT_* is returned or -1 if an error
 ///         occurred.
 ///
 int fg_get_format(fg_grabber *fg);
@@ -469,7 +473,7 @@ int fg_get_format(fg_grabber *fg);
 ///\brief   Set the size of the video frames.
 ///
 /// This function sets the size of the video frames captured from the frame
-/// grabber.  By default the size will be FG_DEFAULT_WIDTH and 
+/// grabber.  By default the size will be FG_DEFAULT_WIDTH and
 /// FG_DEFAULT_HEIGHT.
 ///
 /// \param  fg      The frame grabber to set the capture size on.
@@ -512,7 +516,7 @@ int fg_set_capture_window(fg_grabber *fg, fg_rect *rect);
 /// \brief  Get the current capture window for the video frames.
 ///
 /// This function gets the cropping fg_rect which is currently cropped out of
-/// a region of the full capture frames.  This may not be supported on some 
+/// a region of the full capture frames.  This may not be supported on some
 /// devices.
 ///
 /// \param  fg      The frame grabber to get the capture window on.
@@ -530,7 +534,7 @@ int fg_get_capture_window(fg_grabber *fg, fg_rect *rect);
  * These functions pertain to invidual controls
  * @{
  */
- 
+
 /* Return codes for control-related functions. */
 #define FG_CONTROL_OK               0   ///< Control is read/write
 #define FG_CONTROL_INVALID          -1  ///< Control is not supported
@@ -544,7 +548,7 @@ typedef enum {
     /// Picture brightness, or more precisely, the black level.
     FG_CONTROL_ID_BRIGHTNESS             = V4L2_CID_BRIGHTNESS,
     /// Picture contrast or luma gain.
-    FG_CONTROL_ID_CONTRAST               = V4L2_CID_CONTRAST, 
+    FG_CONTROL_ID_CONTRAST               = V4L2_CID_CONTRAST,
     /// Picture color saturation or chroma gain.
     FG_CONTROL_ID_SATURATION             = V4L2_CID_SATURATION,
     /// Hue or color balance.
@@ -627,9 +631,9 @@ typedef enum {
 ///
 /// \param  fg          Frame grabber to check control on.
 /// \param  control_id  The ID of the control to check.
-/// 
+///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, and 
+///         FG_CONTROL_READ_ONLY if the control can only be read, and
 ///         FG_CONTROL_OK if the control can be read or set.
 ///
 int fg_check_control(fg_grabber *fg, fg_control_id control_id);
@@ -646,7 +650,7 @@ int fg_check_control(fg_grabber *fg, fg_control_id control_id);
 /// \param  value       Value to set control to.
 ///
 /// \return FG_CONTROL_INVALID if the control is disabled or not supported,
-///         FG_CONTROL_READ_ONLY if the control can only be read, and 
+///         FG_CONTROL_READ_ONLY if the control can only be read, and
 ///         FG_CONTROL_OK if the control was set.
 ///
 int fg_set_control(fg_grabber *fg, fg_control_id control_id, int value);
@@ -698,7 +702,7 @@ int fg_get_audio_balance(fg_grabber *fg);
 /// \param  value   Value to set audio balance to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_audio_balance(fg_grabber *fg, int value);
@@ -726,7 +730,7 @@ int fg_get_audio_bass(fg_grabber *fg);
 /// \param  value   Value to set audio bass to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_audio_bass(fg_grabber *fg, int value);
@@ -754,7 +758,7 @@ int fg_get_audio_loudness(fg_grabber *fg);
 /// \param  value   Value to set audio loudness to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_audio_loudness(fg_grabber *fg, int value);
@@ -782,7 +786,7 @@ int fg_get_audio_mute(fg_grabber *fg);
 /// \param  value   Value to set audio mute to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_audio_mute(fg_grabber *fg, int value);
@@ -810,7 +814,7 @@ int fg_get_audio_treble(fg_grabber *fg);
 /// \param  value   Value to set audio treble to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_audio_treble(fg_grabber *fg, int value);
@@ -838,7 +842,7 @@ int fg_get_audio_volume(fg_grabber *fg);
 /// \param  value   Value to set audio volume to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_audio_volume(fg_grabber *fg, int value);
@@ -848,7 +852,7 @@ int fg_set_audio_volume(fg_grabber *fg, int value);
 ///
 /// \brief Get value of auto brightness.
 ///
-/// 
+///
 ///
 /// \param fg     Frame grabber to set auto brightness on.
 ///
@@ -860,13 +864,13 @@ int fg_get_auto_brightness(fg_grabber *fg);
 ///
 /// \brief Set value of auto brightness.
 ///
-/// 
+///
 ///
 /// \param  fg      Frame grabber to set auto brightness on.
 /// \param  value   Value to set auto brightness to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_auto_brightness(fg_grabber *fg, int value);
@@ -894,7 +898,7 @@ int fg_get_auto_gain(fg_grabber *fg);
 /// \param  value   Value to set auto gain to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_auto_gain(fg_grabber *fg, int value);
@@ -922,7 +926,7 @@ int fg_get_auto_hue(fg_grabber *fg);
 /// \param  value   Value to set auto hue to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_auto_hue(fg_grabber *fg, int value);
@@ -950,7 +954,7 @@ int fg_get_auto_white_balance(fg_grabber *fg);
 /// \param  value   Value to set auto white balance to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_auto_white_balance(fg_grabber *fg, int value);
@@ -960,7 +964,7 @@ int fg_set_auto_white_balance(fg_grabber *fg, int value);
 ///
 /// \brief Get value of background color.
 ///
-/// 
+///
 ///
 /// \param fg     Frame grabber to set background color on.
 ///
@@ -972,13 +976,13 @@ int fg_get_background_color(fg_grabber *fg);
 ///
 /// \brief Set value of background color.
 ///
-/// 
+///
 ///
 /// \param  fg      Frame grabber to set background color on.
 /// \param  value   Value to set background color to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_background_color(fg_grabber *fg, int value);
@@ -1006,7 +1010,7 @@ int fg_get_backlight_compensation(fg_grabber *fg);
 /// \param  value   Value to set backlight compensation to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_backlight_compensation(fg_grabber *fg, int value);
@@ -1016,7 +1020,7 @@ int fg_set_backlight_compensation(fg_grabber *fg, int value);
 ///
 /// \brief Get value of band stop filter.
 ///
-/// 
+///
 ///
 /// \param fg     Frame grabber to set band stop filter on.
 ///
@@ -1028,13 +1032,13 @@ int fg_get_band_stop_filter(fg_grabber *fg);
 ///
 /// \brief Set value of band stop filter.
 ///
-/// 
+///
 ///
 /// \param  fg      Frame grabber to set band stop filter on.
 /// \param  value   Value to set band stop filter to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_band_stop_filter(fg_grabber *fg, int value);
@@ -1062,7 +1066,7 @@ int fg_get_blue_balance(fg_grabber *fg);
 /// \param  value   Value to set blue balance to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_blue_balance(fg_grabber *fg, int value);
@@ -1090,7 +1094,7 @@ int fg_get_brightness(fg_grabber *fg);
 /// \param  value   Value to set brightness to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_brightness(fg_grabber *fg, int value);
@@ -1100,7 +1104,7 @@ int fg_set_brightness(fg_grabber *fg, int value);
 ///
 /// \brief Get value of chroma agc.
 ///
-/// 
+///
 ///
 /// \param fg     Frame grabber to set chroma agc on.
 ///
@@ -1112,13 +1116,13 @@ int fg_get_chroma_agc(fg_grabber *fg);
 ///
 /// \brief Set value of chroma agc.
 ///
-/// 
+///
 ///
 /// \param  fg      Frame grabber to set chroma agc on.
 /// \param  value   Value to set chroma agc to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_chroma_agc(fg_grabber *fg, int value);
@@ -1128,7 +1132,7 @@ int fg_set_chroma_agc(fg_grabber *fg, int value);
 ///
 /// \brief Get value of color effects.
 ///
-/// 
+///
 ///
 /// \param fg     Frame grabber to set color effects on.
 ///
@@ -1140,13 +1144,13 @@ int fg_get_color_effects(fg_grabber *fg);
 ///
 /// \brief Set value of color effects.
 ///
-/// 
+///
 ///
 /// \param  fg      Frame grabber to set color effects on.
 /// \param  value   Value to set color effects to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_color_effects(fg_grabber *fg, int value);
@@ -1156,7 +1160,7 @@ int fg_set_color_effects(fg_grabber *fg, int value);
 ///
 /// \brief Get value of color killer.
 ///
-/// 
+///
 ///
 /// \param fg     Frame grabber to set color killer on.
 ///
@@ -1168,13 +1172,13 @@ int fg_get_color_killer(fg_grabber *fg);
 ///
 /// \brief Set value of color killer.
 ///
-/// 
+///
 ///
 /// \param  fg      Frame grabber to set color killer on.
 /// \param  value   Value to set color killer to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_color_killer(fg_grabber *fg, int value);
@@ -1202,7 +1206,7 @@ int fg_get_contrast(fg_grabber *fg);
 /// \param  value   Value to set contrast to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_contrast(fg_grabber *fg, int value);
@@ -1230,7 +1234,7 @@ int fg_get_do_white_balance(fg_grabber *fg);
 /// \param  value   Value to set do white balance to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_do_white_balance(fg_grabber *fg, int value);
@@ -1258,7 +1262,7 @@ int fg_get_exposure(fg_grabber *fg);
 /// \param  value   Value to set exposure to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_exposure(fg_grabber *fg, int value);
@@ -1286,7 +1290,7 @@ int fg_get_gain(fg_grabber *fg);
 /// \param  value   Value to set gain to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_gain(fg_grabber *fg, int value);
@@ -1314,7 +1318,7 @@ int fg_get_gamma(fg_grabber *fg);
 /// \param  value   Value to set gamma to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_gamma(fg_grabber *fg, int value);
@@ -1342,7 +1346,7 @@ int fg_get_hflip(fg_grabber *fg);
 /// \param  value   Value to set hflip to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_hflip(fg_grabber *fg, int value);
@@ -1370,7 +1374,7 @@ int fg_get_hue(fg_grabber *fg);
 /// \param  value   Value to set hue to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_hue(fg_grabber *fg, int value);
@@ -1398,7 +1402,7 @@ int fg_get_power_line_frequency(fg_grabber *fg);
 /// \param  value   Value to set power line frequency to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_power_line_frequency(fg_grabber *fg, int value);
@@ -1426,7 +1430,7 @@ int fg_get_red_balance(fg_grabber *fg);
 /// \param  value   Value to set red balance to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_red_balance(fg_grabber *fg, int value);
@@ -1436,7 +1440,7 @@ int fg_set_red_balance(fg_grabber *fg, int value);
 ///
 /// \brief Get value of rotate.
 ///
-/// 
+///
 ///
 /// \param fg     Frame grabber to set rotate on.
 ///
@@ -1448,13 +1452,13 @@ int fg_get_rotate(fg_grabber *fg);
 ///
 /// \brief Set value of rotate.
 ///
-/// 
+///
 ///
 /// \param  fg      Frame grabber to set rotate on.
 /// \param  value   Value to set rotate to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_rotate(fg_grabber *fg, int value);
@@ -1482,7 +1486,7 @@ int fg_get_saturation(fg_grabber *fg);
 /// \param  value   Value to set saturation to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_saturation(fg_grabber *fg, int value);
@@ -1510,7 +1514,7 @@ int fg_get_sharpness(fg_grabber *fg);
 /// \param  value   Value to set sharpness to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_sharpness(fg_grabber *fg, int value);
@@ -1538,7 +1542,7 @@ int fg_get_vflip(fg_grabber *fg);
 /// \param  value   Value to set vflip to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_vflip(fg_grabber *fg, int value);
@@ -1566,7 +1570,7 @@ int fg_get_white_balance_temp(fg_grabber *fg);
 /// \param  value   Value to set white balance temp to.
 ///
 /// \return #FG_CONTROL_INVALID if the control is disabled or not supported,
-///         #FG_CONTROL_READ_ONLY if the control can only be read or 
+///         #FG_CONTROL_READ_ONLY if the control can only be read or
 ///         #FG_CONTROL_OK if the value could be set.
 ///
 int fg_set_white_balance_temp(fg_grabber *fg, int value);
@@ -1574,7 +1578,7 @@ int fg_set_white_balance_temp(fg_grabber *fg, int value);
 //------------------------------------------------------------------------
 
 
- 
+
 /** @} */ // end of control group
 
 //------------------------------------------------------------------------------
@@ -1589,7 +1593,7 @@ int fg_set_white_balance_temp(fg_grabber *fg, int value);
 ///
 /// This function allocates memory for a new frame based on the frame grabber's
 /// current settings (width, height, number of bytes, etc.).  A frame created
-/// with this function can be passed to any of the fg_frame_* functions and 
+/// with this function can be passed to any of the fg_frame_* functions and
 /// fg_grab_frame().  To free the memory used by the fg_frame, you must call
 /// fg_frame_release() with a pointer to it.  Unless you're using some sort of
 /// buffer array of frames, it's probably best to use a single fg_frame for
@@ -1604,7 +1608,7 @@ fg_frame *fg_frame_new(fg_grabber *fg);
 
 //------------------------------------------------------------------------------
 
-/// 
+///
 /// \brief  Free memory used by an existing frame.
 ///
 /// This function frees/releases memory used by a frame allocated with
@@ -1618,7 +1622,7 @@ void fg_frame_release(fg_frame* fr);
 
 ///
 /// \brief Free memory used by an existing frame.
-/// 
+///
 /// This function is a synonym for #fg_frame_release().
 ///
 /// \param fr  The frame to release memory from.
@@ -1712,7 +1716,7 @@ fg_frame *fg_frame_clone(fg_frame *fr);
 ///
 /// \param  The fg_frame whos image data to save as a JPEG.
 /// \param  The filename to save the JPEG file as.
-/// 
+///
 /// \return 0 on success, -1 on failure.
 ///
 /// \see    The functions in convert.c named fg_frame_to_*() can also be used
@@ -1721,7 +1725,7 @@ fg_frame *fg_frame_clone(fg_frame *fr);
 ///
 int fg_frame_save(fg_frame* fr, const char* filename);
 #endif
- 
+
 #ifdef WITH_SDL
 #include <SDL/SDL.h>
 ///
@@ -1762,8 +1766,8 @@ GdkPixbuf *fg_frame_to_gdk_pixbuf(fg_frame *fr);
 /// \brief  Convert #fg_frame to an Imlib_Image.
 ///
 /// This function creates an Imlib_Image with newly allocated data.  The image
-/// data pointed by the Imlib_Image must be freed before the Imlib_Image.  
-/// Freeing the Imlib_Image will not free the data and you will lose the 
+/// data pointed by the Imlib_Image must be freed before the Imlib_Image.
+/// Freeing the Imlib_Image will not free the data and you will lose the
 /// pointer to the data if it's not freed before hand.
 ///
 /// \param fr Frame to convert.
@@ -1775,7 +1779,6 @@ Imlib_Image *fg_frame_to_imlib2_image(fg_frame *fr);
 
 #ifdef WITH_OPENCV
 #include <cv.h>
-#include <highgui.h>
 ///
 /// \brief Convert #fg_frame to an IplImage.
 ///
@@ -1792,7 +1795,7 @@ IplImage *fg_frame_to_ipl_image(fg_frame *fr);
 #endif
 
 /** @} */ // end of frame section
- 
+
 #ifdef __cplusplus__
 }
 #endif /* __cplusplus__ */

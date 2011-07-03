@@ -30,11 +30,16 @@
 #include <asm/types.h>
 #include <linux/videodev2.h>
 #include "libv4l2.h"
+
+#ifdef HAVE_CONFIG_H
+#include "libfg2-config.h"
+#endif
+
 #include "libfg2.h"
 
 //--------------------------------------------------------------------------
 
-void fg_debug(const char *fmt, ...) 
+void fg_debug(const char *fmt, ...)
 {
     va_list argp;
     va_start(argp, fmt);
@@ -64,10 +69,10 @@ void fg_debug_error(const char *fmt, ...)
 
 static int count_tuners(int fd)
 {
-    
+
     int i, num_tuners = 0;
     struct v4l2_tuner tun;
-    
+
     FG_CLEAR(tun);
 
     for (i=0; i < FG_MAX_TUNERS; i++)
@@ -78,7 +83,7 @@ static int count_tuners(int fd)
         else
             num_tuners++;
     }
-    
+
     return num_tuners;
 }
 
@@ -87,7 +92,7 @@ static int count_controls(int fd)
 {
     int num_controls = 0;
     struct v4l2_queryctrl queryctrl;
-    
+
     for (queryctrl.id = V4L2_CID_BASE;
             queryctrl.id < V4L2_CID_LASTP1;
             queryctrl.id++)
@@ -96,32 +101,32 @@ static int count_controls(int fd)
         {
             if (queryctrl.flags & V4L2_CTRL_FLAG_DISABLED)
                 continue;
-                
+
             num_controls++;
         }
     }
-    
+
     return num_controls;
 }
 */
 
 fg_grabber *fg_open(const char *dev)
 {
-    
+
     fg_grabber* fg;
     int i;
     struct stat st;
     struct v4l2_crop crop;
-    
+
     fg = malloc(sizeof(fg_grabber));
-    
+
     if (fg == NULL)
     {
         fg_debug_error(
             "fg_open(): ran out of memory allocating frame grabber.");
         return NULL;
     }
-    
+
     // Make these safe to free()
     fg->device = NULL;
     fg->inputs = NULL;
@@ -133,7 +138,7 @@ fg_grabber *fg_open(const char *dev)
         fg->device = strdup(dev);
     else
         fg->device = strdup(FG_DEFAULT_DEVICE);
-    
+
     // Verify the device exists
     if (stat(fg->device, &st) == -1)
     {
@@ -141,7 +146,7 @@ fg_grabber *fg_open(const char *dev)
             fg->device);
         goto error_exit;
     }
-    
+
     // Verify the device is a character device
     if (!S_ISCHR(st.st_mode))
     {
@@ -167,31 +172,31 @@ fg_grabber *fg_open(const char *dev)
         fg_debug_error( "fg_open(): query capabilities failed" );
         goto error_exit;
     }
-    
+
     // Make sure video capture is supported
     if (!(fg->caps.capabilities & V4L2_CAP_VIDEO_CAPTURE))
     {
         fg_debug_error("fg_open(): video device does not support video capture");
         goto error_exit;
     }
-    
+
     // Determine the number of inputs
     if ( (fg->num_inputs = fg_get_input_count(fg)) < 1 )
     {
         fg_debug_error("fg_open(): no video inputs were found on video device");
         goto error_exit;
     }
-    
+
     // Read info for all input sources
     fg->input = 0;
     fg->inputs = malloc(sizeof(struct v4l2_input) * fg->num_inputs);
-    
+
     if (fg->inputs == NULL)
     {
         fg_debug_error("fg_open(): ran out of memory allocating inputs.");
         goto error_exit;
     }
-    
+
     for (i=0; i < fg->num_inputs; i++)
     {
         fg->inputs[i].index = i;
@@ -202,26 +207,26 @@ fg_grabber *fg_open(const char *dev)
             goto error_exit;
         }
     }
-    
+
     if (fg_set_input(fg, fg->input) == -1)
     {
         fg_debug_error("fg_open(): error setting default input");
         goto error_exit;
     }
-    
+
     // Determine the number of tuners
     fg->tuner = 0;
     if ((fg->num_tuners = count_tuners(fg->fd)) > 0)
     {
         // Read info for all tuners
         fg->tuners = malloc(sizeof(struct v4l2_tuner) * fg->num_tuners);
-        
+
         if (fg->tuners == NULL)
         {
             fg_debug_error("fg_open(): ran out of memory allocating tuners");
             goto error_exit;
         }
-        
+
         for (i=0; i < fg->num_tuners; i++)
         {
             fg->tuners[i].index = 0;
@@ -232,7 +237,7 @@ fg_grabber *fg_open(const char *dev)
             }
         }
     }
-    
+
     // Reset cropping to default (if supported)
     FG_CLEAR(fg->cropcap);
     fg->cropcap.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -267,11 +272,11 @@ fg_grabber *fg_open(const char *dev)
     fg->format.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     fg->format.fmt.pix.width = FG_DEFAULT_WIDTH;
     fg->format.fmt.pix.height = FG_DEFAULT_HEIGHT;
-    // libv4l should intervene here to support this format even if the 
+    // libv4l should intervene here to support this format even if the
     // device does not support it directly (phew!)
     fg->format.fmt.pix.pixelformat = FG_FORMAT_RGB24;
     fg->format.fmt.pix.field = V4L2_FIELD_INTERLACED;
-    
+
     if (v4l2_ioctl(fg->fd, VIDIOC_S_FMT, &(fg->format)) == -1)
     {
         fg_debug_error("fg_open(): setting video format failed");
@@ -284,7 +289,7 @@ fg_grabber *fg_open(const char *dev)
         fg_debug_error("fg_open(): failed setting controls to default.");
         goto error_exit;
     }
-    
+
     // List available frame rates
     /*
     struct v4l2_frmivalenum fi;
@@ -347,17 +352,17 @@ int fg_set_capture_size(fg_grabber *fg, fg_size *size)
 {
     fg->format.fmt.pix.width = size->width;
     fg->format.fmt.pix.height = size->height;
-    
+
     if (v4l2_ioctl(fg->fd, VIDIOC_S_FMT, &(fg->format)) == -1)
     {
         fg_debug_error("fg_set_capture_size(): setting capture size to "
             "'%dx%d failed", size->width, size->height);
         return -1;
     }
-    
+
     size->width = fg->format.fmt.pix.width;
     size->height = fg->format.fmt.pix.height;
-    
+
     return 0;
 }
 
@@ -367,7 +372,7 @@ int fg_get_capture_size(fg_grabber *fg, fg_size *size)
     {
         fg_debug_error("fg_get_capture_size(): getting capture size failed");
         return -1;
-        
+
     }
     size->width = fg->format.fmt.pix.width;
     size->height = fg->format.fmt.pix.height;
@@ -379,13 +384,13 @@ int fg_get_capture_size(fg_grabber *fg, fg_size *size)
 int fg_set_capture_window(fg_grabber *fg, fg_rect *rect)
 {
     struct v4l2_crop crop;
-    
+
     crop.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     crop.c.left = rect->left;
     crop.c.top = rect->top;
     crop.c.width = rect->width;
     crop.c.height = rect->height;
-    
+
     if (v4l2_ioctl(fg->fd, VIDIOC_S_CROP, &crop) == -1)
     {
         if (errno == EINVAL)
@@ -401,21 +406,21 @@ int fg_set_capture_window(fg_grabber *fg, fg_rect *rect)
             return -1;
         }
     }
-    
+
     rect->left = crop.c.left;
     rect->top = crop.c.top;
     rect->width = crop.c.width;
     rect->height = crop.c.height;
-    
+
     return 0;
 }
 
 int fg_get_capture_window(fg_grabber *fg, fg_rect *rect)
 {
     struct v4l2_crop crop;
-    
+
     crop.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    
+
     if (v4l2_ioctl(fg->fd, VIDIOC_S_CROP, &crop) == -1)
     {
         if (errno == EINVAL)
@@ -431,13 +436,13 @@ int fg_get_capture_window(fg_grabber *fg, fg_rect *rect)
             return -1;
         }
     }
-    
+
     rect->left = crop.c.left;
     rect->top = crop.c.top;
     rect->width = crop.c.width;
     rect->height = crop.c.height;
-    
-    return 0;    
+
+    return 0;
 }
 
 //--------------------------------------------------------------------------
@@ -461,7 +466,7 @@ int fg_set_format(fg_grabber *fg, int fmt)
 {
 
     fg->format.fmt.pix.pixelformat = fmt;
-    
+
     if (v4l2_ioctl(fg->fd, VIDIOC_S_FMT, &(fg->format)) == -1)
     {
         fg_debug_error("fg_set_format(): setting video format failed");
@@ -487,7 +492,7 @@ int fg_get_input_count(fg_grabber *fg)
 {
     int i, num_inputs = 0;
     struct v4l2_input inp;
-    
+
     for (i=0; i < FG_MAX_INPUTS; i++)
     {
         inp.index = i;
@@ -496,33 +501,33 @@ int fg_get_input_count(fg_grabber *fg)
         else
             num_inputs++;
     }
-    
+
     return num_inputs;
 }
 
 int fg_get_input(fg_grabber *fg)
 {
     int current_input;
-    
+
     if (v4l2_ioctl(fg->fd, VIDIOC_G_INPUT, &current_input) == -1)
     {
         fg_debug_error("fg_get_input(): unable to get current input index.");
         return -1;
     }
-    
-    return current_input;    
+
+    return current_input;
 }
 
 int fg_set_input(fg_grabber* fg, int index)
 {
     struct v4l2_format fmt;
-    
+
     if (index >= fg->num_inputs)
     {
         fg_debug_error("fg_set_input(): invalid input number");
         return -1;
     }
-    
+
     FG_CLEAR(fmt);
     fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     if (v4l2_ioctl(fg->fd, VIDIOC_G_FMT, &fmt) == -1)
@@ -543,14 +548,14 @@ int fg_set_input(fg_grabber* fg, int index)
                 return -1;
         }
     }
-    
+
     // Reset the video format
     fg->format.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
     fg->format.fmt.pix.width = fmt.fmt.pix.width;
     fg->format.fmt.pix.height = fmt.fmt.pix.height;
     fg->format.fmt.pix.pixelformat = fmt.fmt.pix.pixelformat;
     fg->format.fmt.pix.field = fmt.fmt.pix.field;
-    
+
     if (v4l2_ioctl(fg->fd, VIDIOC_S_FMT, &(fg->format)) == -1)
     {
         fg_debug_error("fg_set_input(): resetting video format failed");
@@ -564,13 +569,13 @@ int fg_set_input(fg_grabber* fg, int index)
 
 char *fg_get_input_name(fg_grabber *fg, int index)
 {
-    
+
     if (index > fg->num_inputs - 1)
     {
         fg_debug_error("fg_get_input_name(): invalid input number" );
         return NULL;
     }
-    
+
     return (char *)fg->inputs[index].name;
 }
 
@@ -608,13 +613,13 @@ int fg_set_channel( fg_grabber* fg, float freq )
 {
     int val, scale;
     struct v4l2_frequency frq;
-    
+
     if ( !(fg->inputs[fg->input].type & V4L2_INPUT_TYPE_TUNER) )
     {
         fg_debug_error("fg_set_channel(): current source is not a tuner");
         return -1;
     }
-    
+
     // TODO: is this still correct?
     // The LOW flag means freq in 1/16 MHz, not 1/16 kHz
     if ( fg->tuners[fg->tuner].capability & V4L2_TUNER_CAP_LOW )
@@ -622,7 +627,7 @@ int fg_set_channel( fg_grabber* fg, float freq )
     else
         scale = 16;
     val = (int)( freq * scale );
-    
+
     frq.tuner = fg->inputs[fg->input].tuner;
     frq.type = fg->tuners[fg->tuner].type;
     frq.frequency = val;
@@ -641,14 +646,14 @@ float fg_get_channel( fg_grabber* fg )
 {
     int scale;
     struct v4l2_frequency freq;
-    
+
     // TODO: is this correct? (original lib was backwards from set func)
     // The LOW flag means freq in 1/16 MHz, not 1/16 kHz
     if (fg->tuners[fg->tuner].capability & V4L2_TUNER_CAP_LOW)
         scale = 16000;
     else
         scale = 16;
-    
+
     freq.tuner = fg->tuner;
     FG_CLEAR(freq.reserved);
 
@@ -666,19 +671,19 @@ float fg_get_channel( fg_grabber* fg )
 fg_frame *fg_grab(fg_grabber *fg)
 {
     fg_frame *fr = fg_frame_new(fg);
-    
+
     if (fr == NULL)
     {
         fg_debug_error("fg_grab(): ran out of memory allocating frame");
         return NULL;
     }
-    
+
     if (fg_grab_frame(fg, fr) == -1)
     {
         free(fr);
         return NULL;
     }
-    
+
     return fr;
 }
 
@@ -686,23 +691,23 @@ fg_frame *fg_grab(fg_grabber *fg)
 
 int fg_grab_frame(fg_grabber *fg, fg_frame *fr)
 {
-    
-    for (;;) 
+
+    for (;;)
     {
-               
+
         fd_set fds;
         struct timeval tv;
         int r;
-        
+
         FD_ZERO(&fds);
         FD_SET(fg->fd, &fds);
-        
+
         tv.tv_sec = FG_READ_TIMEOUT;
         tv.tv_usec = 0;
 
         r = select(fg->fd + 1, &fds, NULL, NULL, &tv);
-        
-        if ( r == -1 ) 
+
+        if ( r == -1 )
         {
             if (EINTR == errno)
                 continue;
@@ -710,8 +715,8 @@ int fg_grab_frame(fg_grabber *fg, fg_frame *fr)
             fg_debug_error("fg_grab_frame(): grabbing frame failed");
             return -1;
         }
-        
-        if (0 == r) 
+
+        if (0 == r)
         {
             fg_debug_error("fg_grab_frame(): frame grabbing timeout reached");
             return -1;
@@ -734,7 +739,7 @@ int fg_grab_frame(fg_grabber *fg, fg_frame *fr)
             return 0;
         }
     }
-    
+
     return -1;
 }
 
@@ -744,9 +749,9 @@ int fg_set_control(fg_grabber *fg, int control_id, int value)
 {
     int valid_control = 0;
     struct v4l2_queryctrl queryctrl;
-    
+
     FG_CLEAR(queryctrl);
-    
+
     for (queryctrl.id = V4L2_CID_BASE;
             queryctrl.id < V4L2_CID_LASTP1;
             queryctrl.id++)
@@ -770,20 +775,20 @@ int fg_set_control(fg_grabber *fg, int control_id, int value)
             return -1;
         }
     }
-    
+
     if (!valid_control)
     {
         fg_debug_error("fg_set_control(): control not supported");
         return -1;
     }
-    
+
     v4l2_set_control(fg->fd, control_id, value);
-    
+
     return 0;
 }
 
 int fg_get_control(fg_grabber *fg, int control_id)
-{   
+{
     return v4l2_get_control(fg->fd, control_id);
 }
 
@@ -792,16 +797,16 @@ int fg_default_controls(fg_grabber *fg)
     int i;
     struct v4l2_control ctl;
     struct v4l2_queryctrl ctrl;
-    
+
     FG_CLEAR(ctrl);
-    
+
     for (i=V4L2_CID_BASE; i < V4L2_CID_LASTP1; i++)
     {
-        
+
         ctrl.id = i;
         if (v4l2_ioctl(fg->fd, VIDIOC_QUERYCTRL, &ctrl) == -1)
         {
-            
+
             if (errno == EINVAL)
                 continue;
             else
@@ -810,18 +815,18 @@ int fg_default_controls(fg_grabber *fg)
                     "controls");
                 return -1;
             }
-            
+
         }
-        
+
         FG_CLEAR(ctl);
-        
+
         ctl.id = ctrl.id;
         ctl.value = ctrl.default_value;
         if (v4l2_ioctl(fg->fd, VIDIOC_S_CTRL, &ctl) == -1)
             continue;
-            
+
     }
-    
+
     return 0;
 }
 
@@ -829,7 +834,7 @@ char *fg_get_control_name(fg_grabber *fg, int control_id)
 {
     FG_CLEAR(fg->controls[control_id]);
     fg->controls[control_id].id = control_id;
-    if (v4l2_ioctl(fg->fd, VIDIOC_QUERYCTRL, 
+    if (v4l2_ioctl(fg->fd, VIDIOC_QUERYCTRL,
         &(fg->controls[control_id])) == -1)
     {
         return NULL;
@@ -929,16 +934,16 @@ void fg_dump_info(fg_grabber* fg)
     printf("  version        = %d\n", fg->caps.version);
     printf("  card           = %s\n", fg->caps.card);
     printf("  bus_info       = %s\n", fg->caps.bus_info);
-    
+
     printf("\n");
-    
+
     // Format
     printf("  capture size   = %dx%d\n", fg->format.fmt.pix.width,
             fg->format.fmt.pix.height);
     printf("  data length    = %d\n", fg->format.fmt.pix.sizeimage);
-    
+
     printf("\n");
-    
+
     // Inputs
     printf("  num inputs     = %d\n", fg->num_inputs);
     printf("  active input   = %d\n", fg->input);
@@ -947,12 +952,12 @@ void fg_dump_info(fg_grabber* fg)
         printf("    %02d: %s\n", i, fg->inputs[i].name);
         if (fg->inputs[i].type == V4L2_INPUT_TYPE_TUNER)
         {
-            printf("      tuner %02d: %s (signal: %d)\n", 
+            printf("      tuner %02d: %s (signal: %d)\n",
                 fg->inputs[i].tuner, fg->tuners[fg->inputs[i].tuner].name,
                 fg->tuners[fg->inputs[i].tuner].signal);
         }
     }
-    
+
 }
 
 //==========================================================================
