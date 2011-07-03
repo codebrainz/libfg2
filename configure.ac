@@ -170,4 +170,4 @@ AC_FUNC_REALLOC
 AC_CHECK_FUNCS([dup2 ftruncate gettimeofday memset munmap select strdup \
                     strerror strpbrk strstr strtol])
 
-AC_OUTPUT([Makefile src/Makefile])
+AC_OUTPUT([Makefile src/Makefile examples/Makefile])

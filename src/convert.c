@@ -157,44 +157,11 @@ IplImage *fg_frame_to_ipl_image(fg_frame *fr)
     rgb24_to_rgb32(fr->data, fr->length, img32);
 
     image = cvCreateImage(cvSize(fr->size.width, fr->size.height),
-                IPL_DEPTH32S, 4);
+                IPL_DEPTH_32S, 4);
 
     cvSetImageData(img32, fr->data, fr->rowstride);
 
     return image;
 }
 #endif
-#endif /* if 0 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#endif

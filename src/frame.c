@@ -140,7 +140,7 @@ int fg_frame_get_size( fg_frame* fr )
 }
 
 //--------------------------------------------------------------------------
-#if defined(WITH_JPEGLIB) && WITH_JPEGLIB == 1
+#ifdef WITH_JPEG
 int fg_frame_save( fg_frame* fr, const char* filename )
 {
 
