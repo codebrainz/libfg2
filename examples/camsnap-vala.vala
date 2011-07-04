@@ -1,6 +1,6 @@
 using Libfg2;
 
-public static int main(int argc, string[] argv)
+static int main(string[] args)
 {
     FrameGrabber fg = new FrameGrabber("/dev/video0");
     Frame frame = fg.grab();

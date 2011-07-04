@@ -348,48 +348,46 @@ void fg_close(fg_grabber *fg)
 
 //--------------------------------------------------------------------------
 
-int fg_set_capture_size(fg_grabber *fg, fg_size *size)
+int fg_set_capture_size(fg_grabber *fg, fg_size size)
 {
-    fg->format.fmt.pix.width = size->width;
-    fg->format.fmt.pix.height = size->height;
+    fg->format.fmt.pix.width = size.width;
+    fg->format.fmt.pix.height = size.height;
 
     if (v4l2_ioctl(fg->fd, VIDIOC_S_FMT, &(fg->format)) == -1)
     {
         fg_debug_error("fg_set_capture_size(): setting capture size to "
-            "'%dx%d failed", size->width, size->height);
+            "'%dx%d failed", size.width, size.height);
         return -1;
     }
-
-    size->width = fg->format.fmt.pix.width;
-    size->height = fg->format.fmt.pix.height;
 
     return 0;
 }
 
-int fg_get_capture_size(fg_grabber *fg, fg_size *size)
+fg_size fg_get_capture_size(fg_grabber *fg)
 {
+    fg_size size = { 0, 0 };
     if (v4l2_ioctl(fg->fd, VIDIOC_G_FMT, &(fg->format)) == -1)
     {
         fg_debug_error("fg_get_capture_size(): getting capture size failed");
-        return -1;
+        return size;
 
     }
-    size->width = fg->format.fmt.pix.width;
-    size->height = fg->format.fmt.pix.height;
-    return 0;
+    size.width = fg->format.fmt.pix.width;
+    size.height = fg->format.fmt.pix.height;
+    return size;
 }
 
 //--------------------------------------------------------------------------
 
-int fg_set_capture_window(fg_grabber *fg, fg_rect *rect)
+int fg_set_capture_window(fg_grabber *fg, fg_rect rect)
 {
     struct v4l2_crop crop;
 
     crop.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-    crop.c.left = rect->left;
-    crop.c.top = rect->top;
-    crop.c.width = rect->width;
-    crop.c.height = rect->height;
+    crop.c.left = rect.left;
+    crop.c.top = rect.top;
+    crop.c.width = rect.width;
+    crop.c.height = rect.height;
 
     if (v4l2_ioctl(fg->fd, VIDIOC_S_CROP, &crop) == -1)
     {
@@ -407,16 +405,12 @@ int fg_set_capture_window(fg_grabber *fg, fg_rect *rect)
         }
     }
 
-    rect->left = crop.c.left;
-    rect->top = crop.c.top;
-    rect->width = crop.c.width;
-    rect->height = crop.c.height;
-
     return 0;
 }
 
-int fg_get_capture_window(fg_grabber *fg, fg_rect *rect)
+fg_rect fg_get_capture_window(fg_grabber *fg)
 {
+    fg_rect rect = { 0, 0, 0, 0 };
     struct v4l2_crop crop;
 
     crop.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -427,22 +421,22 @@ int fg_get_capture_window(fg_grabber *fg, fg_rect *rect)
         {
             fg_debug_error("fg_get_capture_window(): "
                             "device does not support cropping");
-            return -1;
+            return rect;
         }
         else
         {
             fg_debug_error("fg_get_capture_window(): "
                             "getting cropping window failed");
-            return -1;
+            return rect;
         }
     }
 
-    rect->left = crop.c.left;
-    rect->top = crop.c.top;
-    rect->width = crop.c.width;
-    rect->height = crop.c.height;
+    rect.left = crop.c.left;
+    rect.top = crop.c.top;
+    rect.width = crop.c.width;
+    rect.height = crop.c.height;
 
-    return 0;
+    return rect;
 }
 
 //--------------------------------------------------------------------------

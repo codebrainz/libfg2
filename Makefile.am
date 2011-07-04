@@ -2,10 +2,6 @@ ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = src
 
-if WITH_EXAMPLES
-SUBDIRS += examples
-endif
-
 if WITH_GTK
 SUBDIRS += gtk
 endif
@@ -16,4 +12,8 @@ endif
 
 if WITH_VALA
 SUBDIRS += vala
+endif
+
+if WITH_EXAMPLES
+SUBDIRS += examples
 endif

@@ -35,7 +35,7 @@
 fg_frame *fg_frame_new(fg_grabber *fg)
 {
     fg_frame* fr = malloc( sizeof( fg_frame ) );
-    fg_get_capture_size(fg, &(fr->size));
+    fr->size = fg_get_capture_size(fg);
     fr->format = fg->format.fmt.pix.pixelformat;
     fr->rowstride = fg->format.fmt.pix.bytesperline;
     fr->length = fg->format.fmt.pix.sizeimage;

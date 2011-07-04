@@ -1,6 +1,7 @@
 # Example, test and other programs
-noinst_PROGRAMS = example test fg-udev
+noinst_PROGRAMS = test fg-udev
 
+CLEANFILES =
 pkg_cflags =
 pkg_libs =
 
@@ -48,11 +49,40 @@ pkg_cflags += @vala_CFLAGS@
 pkg_libs += @vala_LIBS@
 endif
 
-example_CPPFLAGS = $(pkg_cflags) -I$(top_srcdir)/libfg2.h
-example_LDADD = $(pkg_libs) $(top_builddir)/src/libfg2.la
-example_SOURCES = example.c
+if WITH_JPEG
+noinst_PROGRAMS += camsnap
+camsnap_CPPFLAGS = $(pkg_cflags) -I$(top_srcdir)/src
+camsnap_LDADD = $(pkg_libs) $(top_builddir)/src/libfg2.la
+camsnap_SOURCES = camsnap.c
+endif
 
-test_CPPFLAGS = $(pkg_cflags) -I$(top_srcdir)/libfg2.h
+if WITH_GTK
+noinst_PROGRAMS += camview-gtk
+camview_gtk_CPPFLAGS = $(pkg_cflags) \
+						-I$(top_srcdir)/src \
+						-I$(top_srcdir)/gtk
+camview_gtk_LDADD = $(pkg_libs) \
+						$(top_builddir)/src/libfg2.la \
+						$(top_builddir)/gtk/libgtkcamera.la
+camview_gtk_SOURCES = camview-gtk.c
+endif
+
+if WITH_SDL
+noinst_PROGRAMS += camview-sdl
+camview_sdl_CPPFLAGS = $(pkg_cflags) -I$(top_srcdir)/src
+camview_sdl_LDADD = $(pkg_libs) $(top_builddir)/src/libfg2.la
+camview_sdl_SOURCES = camview-sdl.c
+endif
+
+if WITH_VALA
+noinst_PROGRAMS += camsnap-vala
+VALAFLAGS = --vapidir $(top_srcdir)/vala --pkg gtk+-2.0 --pkg fg2
+camsnap_vala_CPPFLAGS = $(pkg_cflags) -I$(top_srcdir)/src
+camsnap_vala_LDADD = $(pkg_libs) $(top_builddir)/src/libfg2.la
+camsnap_vala_SOURCES = camsnap-vala.vala
+endif
+
+test_CPPFLAGS = $(pkg_cflags) -I$(top_srcdir)/src
 test_LDADD = $(pkg_libs) $(top_builddir)/src/libfg2.la
 test_SOURCES = test.c
 

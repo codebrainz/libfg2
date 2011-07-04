@@ -398,7 +398,7 @@ char *fg_get_input_name(fg_grabber *fg, int index);
 /// \param  fg      The frame grabber to get the input type on.
 /// \param  index   The input number to get the type of.
 ///
-/// \return One of FG_INPUT_TYPE_TUNER or FG_INPUT_TYPE_TUNER on success,
+/// \return One of FG_INPUT_TYPE_CAMERA or FG_INPUT_TYPE_TUNER on success,
 /// or -1 if an error occurred.
 ///
 int fg_get_input_type( fg_grabber* fg, int index );
@@ -481,7 +481,7 @@ int fg_get_format(fg_grabber *fg);
 ///
 /// \return On success, 0 is returned or -1 is returned if an error occurred.
 ///
-int fg_set_capture_size(fg_grabber *fg, fg_size *size);
+int fg_set_capture_size(fg_grabber *fg, fg_size size);
 
 //------------------------------------------------------------------------------
 ///
@@ -495,7 +495,7 @@ int fg_set_capture_size(fg_grabber *fg, fg_size *size);
 ///
 /// \return On success 0, on error -1.
 ///
-int fg_get_capture_size(fg_grabber *fg, fg_size *size);
+fg_size fg_get_capture_size(fg_grabber *fg);
 
 //------------------------------------------------------------------------------
 ///
@@ -509,7 +509,7 @@ int fg_get_capture_size(fg_grabber *fg, fg_size *size);
 ///
 /// \return On success 0, on error -1.
 ///
-int fg_set_capture_window(fg_grabber *fg, fg_rect *rect);
+int fg_set_capture_window(fg_grabber *fg, fg_rect rect);
 
 //------------------------------------------------------------------------------
 ///
@@ -524,7 +524,7 @@ int fg_set_capture_window(fg_grabber *fg, fg_rect *rect);
 ///
 /// \return On success 0, on error -1.
 ///
-int fg_get_capture_window(fg_grabber *fg, fg_rect *rect);
+fg_rect fg_get_capture_window(fg_grabber *fg);
 
 /** @} */ //end of grabber group
 
@@ -1706,7 +1706,7 @@ fg_frame *fg_frame_clone(fg_frame *fr);
 
 //------------------------------------------------------------------------------
 
-#ifdef WITH_JPEGLIB
+#ifdef WITH_JPEG
 /// \brief  Save a frame as a JPEG file.
 ///
 /// This function uses jpeglib to save the image in an fg_frame to a JPEG

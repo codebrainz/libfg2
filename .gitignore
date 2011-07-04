@@ -86,3 +86,10 @@ snapshot.jpg
 examples/example
 examples/test
 examples/fg-udev
+examples/camsnap
+examples/camsnap.c
+examples/camsnap-vala
+examples/camview-gtk
+examples/camview-sdl
+examples/camsnap-vala.c
+examples/camsnap_vala_vala.stamp

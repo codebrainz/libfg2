@@ -3,7 +3,6 @@ AC_PREREQ([2.67])
 AC_INIT([libfg2], [0.1], [https://github.com/codebrainz/libfg2/issues])
 AM_INIT_AUTOMAKE([libfg2], [0.1])
 AC_CONFIG_MACRO_DIR([m4])
-AC_CONFIG_SRCDIR([src/libfg2.h])
 AC_CONFIG_HEADERS([src/libfg2-config.h])
 AM_INIT_AUTOMAKE([foreign silent-rules])
 AM_SILENT_RULES([yes])
@@ -144,6 +143,7 @@ AS_IF([test "x$with_vala" = "xyes"], [
         [AC_DEFINE(WITH_VALA,1,[Define to 1 to use Vala])]
     )]
 )
+AS_IF([test "x$with_vala" = "xyes"], [AM_PROG_VALAC([0.10])])
 AM_CONDITIONAL([WITH_VALA], [test "x$with_vala" = "xyes"])
 #-------------------------------------------------------------------------------
 # Examples and Tests
