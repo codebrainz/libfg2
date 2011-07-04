@@ -83,6 +83,9 @@ snapshot.jpg
 
 .deps/
 .libs/
+
+doc/reference/
+
 examples/example
 examples/test
 examples/fg-udev

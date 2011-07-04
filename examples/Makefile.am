@@ -1,5 +1,4 @@
 noinst_PROGRAMS =
-
 CLEANFILES =
 pkg_cflags =
 pkg_libs =

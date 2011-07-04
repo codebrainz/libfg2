@@ -167,5 +167,4 @@ namespace Libfg2
     {
         public uint width, height;
     }
-
 }
