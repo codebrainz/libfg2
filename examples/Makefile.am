@@ -1,5 +1,4 @@
-# Example, test and other programs
-noinst_PROGRAMS = test fg-udev
+noinst_PROGRAMS =
 
 CLEANFILES =
 pkg_cflags =
@@ -88,9 +87,11 @@ camsnap_vala_LDADD = $(pkg_libs) $(top_builddir)/src/libfg2.la
 camsnap_vala_SOURCES = camsnap-vala.vala
 endif
 
+noinst_PROGRAMS += test
 test_CPPFLAGS = $(pkg_cflags) -I$(top_srcdir)/src
 test_LDADD = $(pkg_libs) $(top_builddir)/src/libfg2.la
 test_SOURCES = test.c
 
-fg_udev_SOURCES = fg-udev.c
+#noinst_PROGRAMS += fg-udev
+#fg_udev_SOURCES = fg-udev.c
 
