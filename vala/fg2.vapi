@@ -1,14 +1,13 @@
-
 [CCode (cheader_filename="libfg2.h")]
 namespace Libfg2
 {
     [Compact]
-    [CCode (cname="fg_grabber", cprefix="fg_", lower_case_prefix="fg_", free_function="fg_close")]
+    [CCode (cname="fg_grabber", cprefix="fg_", lower_case_prefix="fg_",
+        free_function="fg_close")]
     public class FrameGrabber
     {
         [CCode (cname="fg_open")]
         public FrameGrabber(string device);
-        public int check_control(Control control_id);
 
         public uint input
         {
@@ -19,7 +18,7 @@ namespace Libfg2
         public Frame grab();
         public int grab_frame(out Frame frame);
 
-        public uint input_count
+        public int input_count
         {
             [CCode (cname="fg_get_input_count")] get;
         }
@@ -50,16 +49,57 @@ namespace Libfg2
             [CCode (cname="fg_get_capture_window")] get;
             [CCode (cname="fg_set_capture_window")] set;
         }
+
+        public int check_control(Control control);
+        public int set_control(Control control, uint value);
+        public int get_control(Control control);
+        public int default_controls();/
     }
 
     [Compact]
-    [CCode (cname="fg_frame", cprefix="fg_frame_", lower_case_prefix="fg_frame_", free_function="fg_frame_free")]
+    [CCode (cname="fg_frame", cprefix="fg_frame_",
+        lower_case_prefix="fg_frame_", free_function="fg_frame_free")]
     public class Frame
     {
         [CCode (cname="fg_frame_new")]
         public Frame(FrameGrabber fg);
 
         public int save(string filename);
+        public int copy(out Frame dest);
+        static public int copy_frame(Frame source, out Frame dest);
+        public Frame clone();
+        public static Frame clone_frame(Frame source);
+
+        public uchar[] data
+        {
+            [CCode (cname="fg_frame_get_data")] get;
+        }
+
+        [CCode (cname="fg_frame_get_size")]
+        public int data_length
+        {
+            [CCode (cname="fg_frame_get_size")] get;
+        }
+
+        public int width
+        {
+            [CCode (cname="fg_frame_get_width")]    get;
+        }
+
+        public int height
+        {
+            [CCode (cname="fg_frame_get_height")]   get;
+        }
+
+#if WITH_SDL
+        using SDL;
+        public SDL.Surface to_sdl_surface();
+#endif
+
+#if WITH_GDKPIXBUF
+        using Gdk;
+        public Gdk.Pixbuf to_gdk_pixbuf();
+#endif
     }
 
     [CCode (cname="fg_control_id", common_prefix="FG_CONTROL_ID_")]
@@ -118,18 +158,14 @@ namespace Libfg2
     [CCode (cname="fg_rect")]
     public struct Rectangle
     {
-        public uint left;
-        public uint top;
-        public uint width;
-        public uint height;
+        public uint left, top, width, height;
     }
 
     [Compact]
     [CCode (cname="fg_size")]
     public struct Size
     {
-        public uint width;
-        public uint height;
+        public uint width, height;
     }
 
 }

@@ -76,7 +76,13 @@ endif
 
 if WITH_VALA
 noinst_PROGRAMS += camsnap-vala
-VALAFLAGS = --vapidir $(top_srcdir)/vala --pkg gtk+-2.0 --pkg fg2
+VALAFLAGS = --vapidir $(top_srcdir)/vala --pkg fg2
+if WITH_SDL
+VALAFLAGS += -DWITH_SDL
+endif
+if WITH_GDKPIXBUF
+VALAFLAGS += -DWITH_GDKPIXBUF
+endif
 camsnap_vala_CPPFLAGS = $(pkg_cflags) -I$(top_srcdir)/src
 camsnap_vala_LDADD = $(pkg_libs) $(top_builddir)/src/libfg2.la
 camsnap_vala_SOURCES = camsnap-vala.vala
