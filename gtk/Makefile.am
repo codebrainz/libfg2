@@ -54,5 +54,5 @@ libgtkcamera_la_CFLAGS = @gtk_CFLAGS@ $(pkg_cflags) -I$(top_srcdir)/src
 libgtkcamera_la_SOURCES = gtkcamera.c
 
 
-includedir = $(libdir)/gtkcamera
-include_HEADERS = gtkcamera.h
+gtkcamera_includedir = $(includedir)/gtkcamera
+gtkcamera_include_HEADERS = gtkcamera.h
