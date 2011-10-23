@@ -47,12 +47,12 @@ pkg_cflags += @vala_CFLAGS@
 pkg_libs += @vala_LIBS@
 endif
 
-if WITH_JPEG
-noinst_PROGRAMS += camsnap
-camsnap_CPPFLAGS = $(pkg_cflags) -I$(top_srcdir)/src
-camsnap_LDADD = $(pkg_libs) $(top_builddir)/src/libfg2.la
-camsnap_SOURCES = camsnap.c
-endif
+#if WITH_JPEG
+#noinst_PROGRAMS += camsnap
+#camsnap_CPPFLAGS = $(pkg_cflags) -I$(top_srcdir)/src
+#camsnap_LDADD = $(pkg_libs) $(top_builddir)/src/libfg2.la
+#camsnap_SOURCES = camsnap.c
+#endif
 
 if WITH_GTK
 noinst_PROGRAMS += camview-gtk
