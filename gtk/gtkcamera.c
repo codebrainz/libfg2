@@ -22,88 +22,184 @@
 #include "libfg2.h"
 #include "gtkcamera.h"
 
-struct _GtkCameraPrivate
+
+enum
 {
-    fg_grabber *fg;
-    fg_frame *frame;
+  PROP_0,
+  PROP_DEVICE,
+  PROP_INPUT,
+  PROP_LAST
 };
 
-static void gtk_camera_finalize            (GObject *object);
+
+struct _GtkCameraPrivate
+{
+  fg_grabber *fg;
+  fg_frame *frame;
+};
+
+
+static void gtk_camera_finalize     (GObject      *object);
+static void gtk_camera_get_property (GObject      *object,
+                                     guint         property_id,
+                                     GValue       *value,
+                                     GParamSpec   *pspec);
+static void gtk_camera_set_property (GObject      *object,
+                                     guint         property_id,
+                                     const GValue *value,
+                                     GParamSpec   *pspec);
+
+
 
 G_DEFINE_TYPE(GtkCamera, gtk_camera, GTK_TYPE_IMAGE)
 
 
-static void gtk_camera_class_init(GtkCameraClass *klass)
+static void
+gtk_camera_class_init (GtkCameraClass *klass)
 {
-    GObjectClass *g_object_class;
+  GObjectClass *g_object_class;
 
-    g_object_class = G_OBJECT_CLASS(klass);
+  g_object_class = G_OBJECT_CLASS (klass);
+  g_object_class->finalize = gtk_camera_finalize;
+  g_object_class->get_property = gtk_camera_get_property;
+  g_object_class->set_property = gtk_camera_set_property;
 
-    g_object_class->finalize = gtk_camera_finalize;
+  g_type_class_add_private ((gpointer) klass, sizeof(GtkCameraPrivate));
 
-    g_type_class_add_private((gpointer)klass, sizeof(GtkCameraPrivate));
+  g_object_class_install_property (
+    g_object_class,
+    PROP_DEVICE,
+    g_param_spec_string ("device",
+                         "Device",
+                         "Video capture device",
+                         "/dev/video0",
+                         G_PARAM_CONSTRUCT | G_PARAM_READWRITE));
+
+  g_object_class_install_property (
+    g_object_class,
+    PROP_INPUT,
+    g_param_spec_uint ("input",
+                       "Input",
+                       "Input number",
+                       0, 64, 0,
+                       G_PARAM_CONSTRUCT | G_PARAM_READWRITE));
 }
 
 
-static void gtk_camera_finalize(GObject *object)
+static void
+gtk_camera_finalize (GObject *object)
 {
-    GtkCamera *self;
+  GtkCamera *self;
 
-    g_return_if_fail(object != NULL);
-    g_return_if_fail(GTK_IS_CAMERA(object));
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_CAMERA (object));
 
-    self = GTK_CAMERA(object);
+  self = GTK_CAMERA (object);
 
-    if (self->priv->frame != NULL)
-        fg_frame_free(self->priv->frame);
+  if (self->priv->frame != NULL)
+    fg_frame_free (self->priv->frame);
 
-    if (self->priv->fg != NULL)
-        fg_close(self->priv->fg);
+  if (self->priv->fg != NULL)
+    fg_close (self->priv->fg);
 
-    G_OBJECT_CLASS(gtk_camera_parent_class)->finalize(object);
+  G_OBJECT_CLASS (gtk_camera_parent_class)->finalize (object);
 }
 
 
-static void gtk_camera_init(GtkCamera *self)
+static void
+gtk_camera_init (GtkCamera *self)
 {
-    self->priv = G_TYPE_INSTANCE_GET_PRIVATE(self,
-        GTK_TYPE_CAMERA, GtkCameraPrivate);
-    self->priv->fg = NULL;
-    self->priv->frame = NULL;
+  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, GTK_TYPE_CAMERA, GtkCameraPrivate);
+  self->priv->fg = NULL;
+  self->priv->frame = NULL;
 }
 
 
-static gboolean on_idle(GtkCamera *self)
+static gboolean
+on_idle (GtkCamera *self)
 {
-    GdkPixbuf *pixbuf;
+  GdkPixbuf *pixbuf;
 
-    g_return_val_if_fail(GTK_IS_CAMERA(self), TRUE);
+  g_return_val_if_fail (GTK_IS_CAMERA (self), TRUE);
+  g_return_val_if_fail (self->priv->fg != NULL, FALSE);
 
-    fg_grab_frame(self->priv->fg, self->priv->frame);
+  fg_grab_frame (self->priv->fg, self->priv->frame);
+  pixbuf = fg_frame_to_gdk_pixbuf (self->priv->frame);
 
-    pixbuf = fg_frame_to_gdk_pixbuf(self->priv->frame);
+  if (pixbuf)
+    {
+      gtk_image_set_from_pixbuf (GTK_IMAGE (self), pixbuf);
+      gdk_pixbuf_unref (pixbuf);
+    }
 
-    gtk_image_set_from_pixbuf(GTK_IMAGE(self), pixbuf);
-
-    gdk_pixbuf_unref(pixbuf);
-
-    return TRUE;
+  return TRUE;
 }
 
 
-GtkWidget *gtk_camera_new(const gchar *device, guint input)
+GtkWidget *
+gtk_camera_new (const gchar *device,
+                guint input)
 {
-    GtkCamera *self;
+  GtkCamera *self;
 
-    g_return_val_if_fail(device != NULL, NULL);
+  g_return_val_if_fail (device != NULL, NULL);
 
-    self = g_object_new(GTK_TYPE_CAMERA, NULL);
+  self = g_object_new (GTK_TYPE_CAMERA, "device", device, "input", input, NULL);
 
-    self->priv->fg = fg_open(device);
-    self->priv->frame = fg_frame_new(self->priv->fg);
+  if (self->priv->fg)
+    self->priv->frame = fg_frame_new (self->priv->fg);
 
-    g_idle_add((GSourceFunc) on_idle, self);
+  g_idle_add ((GSourceFunc) on_idle, self);
 
-    return GTK_WIDGET(self);
+  return GTK_WIDGET (self);
 }
 
+
+static void
+gtk_camera_get_property (GObject    *object,
+                         guint       property_id,
+                         GValue     *value,
+                         GParamSpec *pspec)
+{
+  GtkCamera *self = GTK_CAMERA (object);
+
+  switch (property_id)
+    {
+    case PROP_DEVICE:
+      g_value_set_string (value, self->priv->fg->device);
+      break;
+    case PROP_INPUT:
+      g_value_set_uint (value, (guint) fg_get_input (self->priv->fg));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+
+static void
+gtk_camera_set_property (GObject      *object,
+                         guint         property_id,
+                         const GValue *value,
+                         GParamSpec   *pspec)
+{
+  GtkCamera *self = GTK_CAMERA (object);
+
+  switch (property_id)
+    {
+    case PROP_DEVICE:
+      if (self->priv->fg)
+        fg_close (self->priv->fg);
+      self->priv->fg = fg_open (g_value_get_string (value));
+      g_return_if_fail (self->priv->fg != NULL);
+      break;
+    case PROP_INPUT:
+      if (self->priv->fg)
+        fg_set_input (self->priv->fg, (gint) g_value_get_uint (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
