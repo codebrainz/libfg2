@@ -32,6 +32,16 @@ enum
 };
 
 
+enum
+{
+  SIGNAL_NEW_FRAME,
+  SIGNAL_LAST
+};
+
+
+static guint gtk_camera_signals[SIGNAL_LAST] = { 0 };
+
+
 struct _GtkCameraPrivate
 {
   fg_grabber *fg;
@@ -83,6 +93,18 @@ gtk_camera_class_init (GtkCameraClass *klass)
                        "Input number",
                        0, 64, 0,
                        G_PARAM_CONSTRUCT | G_PARAM_READWRITE));
+  
+  gtk_camera_signals[SIGNAL_NEW_FRAME] =
+    g_signal_new ("new-frame",
+                  G_TYPE_FROM_CLASS (g_object_class),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL,
+                  NULL,
+                  g_cclosure_marshal_VOID__OBJECT,
+                  G_TYPE_NONE,
+                  1,
+                  GDK_TYPE_PIXBUF);
 }
 
 
@@ -130,6 +152,10 @@ on_idle (GtkCamera *self)
     {
       gtk_image_set_from_pixbuf (GTK_IMAGE (self), pixbuf);
       gdk_pixbuf_unref (pixbuf);
+      g_signal_emit_by_name (self, 
+                             "new-frame", 
+                             gtk_image_get_pixbuf (GTK_IMAGE (self)), 
+                             NULL);
     }
 
   return TRUE;

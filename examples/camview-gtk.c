@@ -15,9 +15,9 @@ static GOptionEntry entries[] = {
 };
 
 
-static on_new_frame(GtkWidget *widget, gpointer data)
+static on_new_frame(GtkCamera *camera, GdkPixbuf *pixbuf, gpointer data)
 {
-
+  /* g_debug ("frame"); */
 }
 
 static GtkWidget *build_main_window(const gchar *device, guint input)
@@ -29,12 +29,11 @@ static GtkWidget *build_main_window(const gchar *device, guint input)
   snprintf (window_title, 255, "CamView GTK+ - %s", device);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-
   gtk_window_set_title (GTK_WINDOW (window), window_title);
-
   g_signal_connect (window, "destroy", gtk_main_quit, NULL);
 
   image = gtk_camera_new (device, input);
+  g_signal_connect (image, "new-frame", G_CALLBACK (on_new_frame), NULL);
 
   gtk_container_add (GTK_CONTAINER (window), image);
 
