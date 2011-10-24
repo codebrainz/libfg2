@@ -53,8 +53,15 @@ struct _GtkCameraClass
 };
 
 
-GType       gtk_camera_get_type     (void);
-GtkWidget *gtk_camera_new(const gchar *device, guint input);
+GType       gtk_camera_get_type   (void);
+GtkWidget  *gtk_camera_new        (const gchar *device, 
+                                   guint        input);
+gchar      *gtk_camera_get_device (GtkCamera   *camera);
+void        gtk_camera_set_device (GtkCamera   *camera,
+                                   const gchar *device);
+guint       gtk_camera_get_input  (GtkCamera   *camera);
+void        gtk_camera_set_input  (GtkCamera   *camera,
+                                   guint        input);
 
 
 G_END_DECLS

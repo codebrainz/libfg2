@@ -55,7 +55,7 @@ endif
 #endif
 
 if WITH_GTK
-noinst_PROGRAMS += camview-gtk
+bin_PROGRAMS = camview-gtk
 camview_gtk_CPPFLAGS = $(pkg_cflags) \
 						-I$(top_srcdir)/src \
 						-I$(top_srcdir)/gtk

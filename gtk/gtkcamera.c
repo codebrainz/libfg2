@@ -136,6 +136,40 @@ on_idle (GtkCamera *self)
 }
 
 
+gchar *
+gtk_camera_get_device (GtkCamera *self)
+{
+  gchar *device = NULL;
+  g_object_get (G_OBJECT (self), "device", &device, NULL);
+  return device;
+}
+
+
+void
+gtk_camera_set_device (GtkCamera   *self,
+                       const gchar *device)
+{
+  g_object_set (G_OBJECT (self), "device", device, NULL);
+}
+
+
+guint 
+gtk_camera_get_input (GtkCamera *self)
+{
+  guint input = 0;
+  g_object_get (G_OBJECT (self), "input", &input, NULL);
+  return input;
+}
+
+
+void
+gtk_camera_set_input (GtkCamera *self,
+                      guint      input)
+{
+  g_object_set (G_OBJECT (self), "input", input, NULL);
+}
+
+
 GtkWidget *
 gtk_camera_new (const gchar *device,
                 guint input)
@@ -193,10 +227,12 @@ gtk_camera_set_property (GObject      *object,
         fg_close (self->priv->fg);
       self->priv->fg = fg_open (g_value_get_string (value));
       g_return_if_fail (self->priv->fg != NULL);
+      g_object_notify (object, "device");
       break;
     case PROP_INPUT:
       if (self->priv->fg)
         fg_set_input (self->priv->fg, (gint) g_value_get_uint (value));
+      g_object_notify (object, "input");
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
