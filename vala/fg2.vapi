@@ -53,7 +53,7 @@ namespace Libfg2
         public int check_control(Control control);
         public int set_control(Control control, uint value);
         public int get_control(Control control);
-        public int default_controls();/
+        public int default_controls();
     }
 
     [Compact]
@@ -66,7 +66,7 @@ namespace Libfg2
 
         public int save(string filename);
         public int copy(out Frame dest);
-        static public int copy_frame(Frame source, out Frame dest);
+        public static int copy_frame(Frame source, out Frame dest);
         public Frame clone();
         public static Frame clone_frame(Frame source);
 
@@ -158,13 +158,17 @@ namespace Libfg2
     [CCode (cname="fg_rect")]
     public struct Rectangle
     {
-        public uint left, top, width, height;
+        public uint left;
+        public uint top;
+        public uint width;
+        public uint height;
     }
 
     [Compact]
     [CCode (cname="fg_size")]
     public struct Size
     {
-        public uint width, height;
+        public uint width;
+        public uint height;
     }
 }
