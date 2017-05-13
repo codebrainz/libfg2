@@ -1,4 +1,4 @@
-[CCode (cheader_filename="libfg2.h")]
+[CCode (cheader_filename="libfg2/libfg2.h")]
 namespace Libfg2
 {
     [Compact]

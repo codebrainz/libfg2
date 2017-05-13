@@ -29,7 +29,7 @@
 #include "libfg2-config.h"
 #endif
 
-#include "libfg2.h"
+#include <libfg2/libfg2.h>
 
 //------------------------------------------------------------------------------
 #if (defined(WITH_IMLIB2) && WITH_IMLIB2 == 1) || (defined(WITH_OPENCV) && WITH_OPENCV == 1)

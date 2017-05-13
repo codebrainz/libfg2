@@ -1,4 +1,5 @@
 AM_CFLAGS = -g -Wall
+AM_CPPFLAGS = -I$(top_srcdir)
 AM_LDFLAGS =
 
 lib_LTLIBRARIES = libfg2.la
@@ -79,7 +80,8 @@ endif
 endif
 endif
 
-include_HEADERS = libfg2.h libfg2-config.h
+libfg2includedir = $(includedir)/libfg2
+libfg2include_HEADERS = libfg2.h
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libfg2.pc

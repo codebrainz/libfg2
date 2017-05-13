@@ -28,7 +28,7 @@
 #include "libfg2-config.h"
 #endif
 
-#include "libfg2.h"
+#include <libfg2/libfg2.h>
 
 //--------------------------------------------------------------------------
 

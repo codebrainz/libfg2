@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <linux/videodev2.h>
 #include <sys/ioctl.h>
-#include "libfg2.h"
+#include <libfg2/libfg2.h>
 
 /* this device MUST be a valid V4L2 capture device */
 #ifndef VALID_DEVICE
