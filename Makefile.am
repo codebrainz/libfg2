@@ -1,6 +1,6 @@
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = src
+SUBDIRS = libfg2
 
 if WITH_GTK
 SUBDIRS += gtk

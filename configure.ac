@@ -2,7 +2,7 @@ AC_PREREQ([2.67])
 
 AC_INIT([libfg2], [0.1], [https://github.com/codebrainz/libfg2/issues])
 AC_CONFIG_MACRO_DIR([m4])
-AC_CONFIG_HEADERS([src/libfg2-config.h])
+AC_CONFIG_HEADERS([libfg2/libfg2-config.h])
 AM_INIT_AUTOMAKE([foreign])
 AM_SILENT_RULES([yes])
 LT_INIT
@@ -179,7 +179,7 @@ AC_CHECK_FUNCS([dup2 ftruncate gettimeofday memset munmap select strdup \
 
 AC_OUTPUT([
     Makefile
-    src/Makefile
+    libfg2/Makefile
     gtk/Makefile
     python/Makefile
     vala/Makefile

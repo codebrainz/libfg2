@@ -84,7 +84,7 @@ include_HEADERS = libfg2.h libfg2-config.h
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libfg2.pc
 
-libfg2.pc: $(top_srcdir)/src/libfg2.pc.in
+libfg2.pc: $(top_srcdir)/libfg2/libfg2.pc.in
 	$(AM_V_GEN)sed -e s'|@prefix[@]|$(prefix)|g' \
 	    -e s'|@exec_prefix[@]|$(exec_prefix)|g' \
 	    -e s'|@includedir[@]|$(includedir)|g' \
