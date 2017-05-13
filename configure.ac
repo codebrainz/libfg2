@@ -1,10 +1,9 @@
 AC_PREREQ([2.67])
 
 AC_INIT([libfg2], [0.1], [https://github.com/codebrainz/libfg2/issues])
-AM_INIT_AUTOMAKE([libfg2], [0.1])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([src/libfg2-config.h])
-AM_INIT_AUTOMAKE([foreign silent-rules])
+AM_INIT_AUTOMAKE([foreign])
 AM_SILENT_RULES([yes])
 LT_INIT
 
