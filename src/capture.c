@@ -253,9 +253,10 @@ fg_grabber *fg_open(const char *dev)
             }
             else
             {
+                // used to be fatal but found devices which it doesn't work with
                 fg_debug_error(
                     "fg_open(): error setting crop window on video device");
-                goto error_exit;
+                //goto error_exit;
             }
         }
     }
