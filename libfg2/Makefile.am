@@ -30,6 +30,9 @@ libfg2.pc: $(top_srcdir)/libfg2/libfg2.pc.in
 	    -e s'|@PKGCONFIG_REQUIRES_PRIVATE[@]|$(pkgconfig_requires_private)|g' \
 	    $< > $@
 
+EXTRA_DIST = libfg2.pc.in
+CLEANFILES = libfg2.pc
+
 if WITH_GDKPIXBUF
 lib_LTLIBRARIES += libfg2-gdkpixbuf.la
 libfg2_gdkpixbuf_la_SOURCES = frame-gdkpixbuf.c
