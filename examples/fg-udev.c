@@ -3,6 +3,10 @@
  * \brief   UDEV device namer for the frame grabber library.
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

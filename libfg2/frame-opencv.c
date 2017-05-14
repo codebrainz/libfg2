@@ -1,3 +1,7 @@
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include <libfg2/libfg2-opencv.h>
 #include <libfg2/convert.h>
 

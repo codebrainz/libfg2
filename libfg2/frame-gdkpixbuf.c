@@ -1,3 +1,7 @@
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include <libfg2/libfg2-gdkpixbuf.h>
 
 GdkPixbuf *fg_frame_to_gdk_pixbuf(fg_frame *fr)

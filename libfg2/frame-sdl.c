@@ -1,3 +1,7 @@
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include <libfg2/libfg2-sdl.h>
 
 SDL_Surface *fg_frame_to_sdl_surface(fg_frame *fr)
