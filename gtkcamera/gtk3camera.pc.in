@@ -4,9 +4,9 @@ libdir=@libdir@
 includedir=@includedir@/gtkcamera
 
 Name: @PACKAGE_NAME@
-Description: GtkCamera widget for GTK+ 2.
+Description: GtkCamera widget for GTK+ 3.
 Requires: libfg2 libfg2-gdkpixbuf
-Requires.private: gtk+-2.0
+Requires.private: gtk+-3.0
 Version: @PACKAGE_VERSION@
-Libs: -L${libdir} -lgtkcamera
+Libs: -L${libdir} -lgtk3camera
 Cflags: -I${includedir}

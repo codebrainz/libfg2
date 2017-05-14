@@ -83,7 +83,8 @@ examples/fg-udev
 examples/camsnap
 examples/camsnap.c
 examples/camsnap-vala
-examples/camview-gtk
+examples/camview-gtk2
+examples/camview-gtk3
 examples/camview-sdl
 examples/camsnap-vala.c
 examples/camsnap_vala_vala.stamp

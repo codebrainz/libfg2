@@ -1,18 +1,31 @@
 if WITH_EXAMPLES
 
 AM_CPPFLAGS = -I$(top_srcdir)
-AM_CFLAGS = $(GTK_CFLAGS) $(GDKPIXBUF_CFLAGS) $(SDL_CFLAGS)
-AM_LDFLAGS = $(GTK_LIBS) $(GDKPIXBUF_LIBS) $(SDL_LIBS)
+AM_CFLAGS = $(GDKPIXBUF_CFLAGS) $(SDL_CFLAGS)
+AM_LDFLAGS = $(GDKPIXBUF_LIBS) $(SDL_LIBS)
 
 noinst_PROGRAMS =
 
-if WITH_GTK
-noinst_PROGRAMS += camview-gtk
-camview_gtk_SOURCES = camview-gtk.c
-camview_gtk_LDADD = \
+if WITH_GTK2
+noinst_PROGRAMS += camview-gtk2
+camview_gtk2_SOURCES = camview-gtk.c
+camview_gtk2_CFLAGS = $(AM_CFLAGS) $(GTK2_CFLAGS)
+camview_gtk2_LDFLAGS = $(AM_LDFLAGS) $(GTK2_LIBS)
+camview_gtk2_LDADD = \
 	$(top_builddir)/libfg2/libfg2.la \
 	$(top_builddir)/libfg2/libfg2-gdkpixbuf.la \
 	$(top_builddir)/gtkcamera/libgtkcamera.la
+endif
+
+if WITH_GTK3
+noinst_PROGRAMS += camview-gtk3
+camview_gtk3_SOURCES = camview-gtk.c
+camview_gtk3_CFLAGS = $(AM_CFLAGS) $(GTK3_CFLAGS)
+camview_gtk3_LDFLAGS = $(AM_LDFLAGS) $(GTK3_LIBS)
+camview_gtk3_LDADD = \
+	$(top_builddir)/libfg2/libfg2.la \
+	$(top_builddir)/libfg2/libfg2-gdkpixbuf.la \
+	$(top_builddir)/gtkcamera/libgtk3camera.la
 endif
 
 if WITH_SDL

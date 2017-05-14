@@ -20,7 +20,8 @@ AC_CHECK_HEADERS([asm/types.h dirent.h fcntl.h linux/videodev2.h \
 
 FG2_CHECK_EXAMPLES
 FG2_CHECK_GDKPIXBUF
-FG2_CHECK_GTK
+FG2_CHECK_GTK2
+FG2_CHECK_GTK3
 FG2_CHECK_IMLIB2
 FG2_CHECK_LIBJPEG
 FG2_CHECK_LIBV4L
@@ -40,6 +41,7 @@ AC_OUTPUT([
     Makefile
     gtkcamera/Makefile
     gtkcamera/gtkcamera.pc
+    gtkcamera/gtk3camera.pc
     libfg2/Makefile
     libfg2/libfg2-gdkpixbuf.pc
     libfg2/libfg2-imlib2.pc
