@@ -9,7 +9,7 @@ AC_DEFUN([FG2_CHECK_GTK],
         ])
         AS_IF([test "x$with_gdkpixbuf" != "xno"], [
             PKG_CHECK_MODULES(
-                [gtk],
+                [GTK],
                 [gtk+-2.0],
                 [
                     AC_DEFINE(WITH_GTK,1,[Define to 1 to use Gtk+])

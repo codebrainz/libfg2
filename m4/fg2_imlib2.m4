@@ -4,7 +4,7 @@ AC_DEFUN([FG2_CHECK_IMLIB2],
         [AS_HELP_STRING([--with-imlib2], [build with support for Imlib_Image format @<:@default=auto@:>@])])
     AS_IF([test "x$with_imlib2" != "xno"], [
         PKG_CHECK_MODULES(
-            [imlib2],
+            [IMLIB2],
             [imlib2],
             [
                 AC_DEFINE(WITH_IMLIB2,1,[Define to 1 to use Imlib2])

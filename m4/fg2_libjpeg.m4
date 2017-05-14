@@ -4,7 +4,7 @@ AC_DEFUN([FG2_CHECK_LIBJPEG],
         [AS_HELP_STRING([--with-jpeg], [build with support for JPEG format @<:@default=auto@:>@])])
     AS_IF([test "x$with_jpeg" != "xno"], [
         PKG_CHECK_MODULES(
-            [jpeg],
+            [LIBJPEG],
             [libjpeg],
             [
                 AC_DEFINE(WITH_JPEG,1,[Define to 1 to use JPEG library])

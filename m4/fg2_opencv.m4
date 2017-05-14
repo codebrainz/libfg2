@@ -4,7 +4,7 @@ AC_DEFUN([FG2_CHECK_OPENCV],
         [AS_HELP_STRING([--with-opencv], [build with support for IplImage format @<:@default=auto@:>@])])
     AS_IF([test "x$with_opencv" != "xno"], [
         PKG_CHECK_MODULES(
-            [opencv],
+            [OPENCV],
             [opencv],
             [
                 AC_DEFINE(WITH_OPENCV,1,[Define to 1 to use OpenCV])

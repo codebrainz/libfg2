@@ -4,7 +4,7 @@ AC_DEFUN([FG2_CHECK_LIBV4L],
         [AS_HELP_STRING([--with-libv4l], [build with support for libv4l @<:@default=auto@:>@])])
     AS_IF([test "x$with_libv4l" != "xno"], [
         PKG_CHECK_MODULES(
-            [libv4l],
+            [LIBV4L],
             [libv4l1 libv4l2 libv4lconvert],
             [
                 AC_DEFINE(WITH_LIBV4L,1,[Define to 1 to use libv4l2])

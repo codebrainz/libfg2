@@ -4,7 +4,7 @@ AC_DEFUN([FG2_CHECK_SDL],
         [AS_HELP_STRING([--with-sdl], [build with support for SDL_Surface format @<:@default=auto@:>@])])
     AS_IF([test "x$with_sdl" != "xno"], [
         PKG_CHECK_MODULES(
-            [sdl],
+            [SDL],
             [sdl],
             [
                 AC_DEFINE(WITH_SDL,1,[Define to 1 to use SDL])
