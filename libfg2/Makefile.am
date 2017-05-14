@@ -1,6 +1,6 @@
 AM_CPPFLAGS = -I$(top_srcdir)
-AM_CFLAGS = @LIBV4L_CFLAGS@ @LIBJPEG_CFLAGS@
-AM_LDFLAGS = @LIBV4L_LIBS@ @LIBJPEG_LIBS@
+AM_CFLAGS = $(LIBV4L_CFLAGS) $(LIBJPEG_CFLAGS)
+AM_LDFLAGS = $(LIBV4L_LIBS) $(LIBJPEG_LIBS)
 
 lib_LTLIBRARIES = libfg2.la
 
@@ -36,8 +36,8 @@ CLEANFILES = libfg2.pc
 if WITH_GDKPIXBUF
 lib_LTLIBRARIES += libfg2-gdkpixbuf.la
 libfg2_gdkpixbuf_la_SOURCES = frame-gdkpixbuf.c
-libfg2_gdkpixbuf_la_CFLAGS = $(AM_CFLAGS) @GDKPIXBUF_CFLAGS@
-libfg2_gdkpixbuf_la_LDFLAGS = $(AM_LDFLAGS) @GDKPIXBUF_LIBS@
+libfg2_gdkpixbuf_la_CFLAGS = $(AM_CFLAGS) $(GDKPIXBUF_CFLAGS)
+libfg2_gdkpixbuf_la_LDFLAGS = $(AM_LDFLAGS) $(GDKPIXBUF_LIBS)
 libfg2include_HEADERS += libfg2-gdkpixbuf.h
 pkgconfig_DATA += libfg2-gdkpixbuf.pc
 endif
@@ -45,8 +45,8 @@ endif
 if WITH_IMLIB2
 lib_LTLIBRARIES += libfg2-imlib2.la
 libfg2_imlib2_la_SOURCES = frame-imlib2.c
-libfg2_imlib2_la_CFLAGS = $(AM_CFLAGS) @IMLIB2_CFLAGS@
-libfg2_imlib2_la_LDFLAGS = $(AM_LDFLAGS) @IMLIB2_LIBS@
+libfg2_imlib2_la_CFLAGS = $(AM_CFLAGS) $(IMLIB2_CFLAGS)
+libfg2_imlib2_la_LDFLAGS = $(AM_LDFLAGS) $(IMLIB2_LIBS)
 libfg2include_HEADERS += libfg2-imlib2.h
 pkgconfig_DATA += libfg2-imlib2.pc
 endif
@@ -54,8 +54,8 @@ endif
 if WITH_OPENCV
 lib_LTLIBRARIES += libfg2-opencv.la
 libfg2_opencv_la_SOURCES = frame-opencv.c
-libfg2_opencv_la_CFLAGS = $(AM_CFLAGS) @OPENCV_CFLAGS@
-libfg2_opencv_la_LDFLAGS = $(AM_LDFLAGS) @OPENCV_LIBS@
+libfg2_opencv_la_CFLAGS = $(AM_CFLAGS) $(OPENCV_CFLAGS)
+libfg2_opencv_la_LDFLAGS = $(AM_LDFLAGS) $(OPENCV_LIBS)
 libfg2include_HEADERS += libfg2-opencv.h
 pkgconfig_DATA += libfg2-opencv.pc
 endif
@@ -63,8 +63,8 @@ endif
 if WITH_SDL
 lib_LTLIBRARIES += libfg2-sdl.la
 libfg2_sdl_la_SOURCES = frame-sdl.c
-libfg2_sdl_la_CFLAGS = $(AM_CFLAGS) @SDL_CFLAGS@
-libfg2_sdl_la_LDFLAGS = $(AM_LDFLAGS) @SDL_LIBS@
+libfg2_sdl_la_CFLAGS = $(AM_CFLAGS) $(SDL_CFLAGS)
+libfg2_sdl_la_LDFLAGS = $(AM_LDFLAGS) $(SDL_LIBS)
 libfg2include_HEADERS += libfg2-sdl.h
 pkgconfig_DATA += libfg2-sdl.pc
 endif

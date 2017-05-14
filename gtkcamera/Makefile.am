@@ -1,8 +1,8 @@
 if WITH_GTK
 
 AM_CPPFLAGS = -I$(top_srcdir)
-AM_CFLAGS = @GTK_CFLAGS@
-AM_LDFLAGS = @GTK_LIBS@
+AM_CFLAGS = $(GTK_CFLAGS)
+AM_LDFLAGS = $(GTK_LIBS)
 
 lib_LTLIBRARIES = libgtkcamera.la
 
