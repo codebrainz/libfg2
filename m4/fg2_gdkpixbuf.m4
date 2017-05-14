@@ -9,11 +9,13 @@ AC_DEFUN([FG2_CHECK_GDKPIXBUF],
                 [
                     AC_DEFINE(WITH_GDKPIXBUF,1,[Define to 1 to use GdkPixbuf])
                     have_gdkpixbuf=1
+                    with_gdkpixbuf=yes
                 ],
                 [
                     AS_IF([test "x$with_gdkpixbuf" = "xyes"], [
                         AC_MSG_ERROR([GdkPixbuf support enabled but gdk-pixbuf-2.0 package not found])])
                     have_gdkpixbuf=0
+                    with_gdkpixbuf=no
                 ]
             )]
     )
