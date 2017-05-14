@@ -3,8 +3,10 @@ AC_PREREQ([2.67])
 AC_INIT([libfg2], [0.1], [https://github.com/codebrainz/libfg2/issues])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
-AM_INIT_AUTOMAKE([foreign])
+AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AM_SILENT_RULES([yes])
+
+AM_PROG_AR
 LT_INIT
 
 AC_PROG_CC
