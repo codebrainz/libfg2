@@ -2,9 +2,9 @@
 # include "config.h"
 #endif
 
+#include <libfg2/libfg2-sdl.h>
 #include <string.h>
 #include <SDL/SDL.h>
-#include <libfg2/libfg2.h>
 
 int main(int argc, char *argv[])
 {
