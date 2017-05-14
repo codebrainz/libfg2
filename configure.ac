@@ -36,6 +36,7 @@ AC_CHECK_MEMBERS([struct stat.st_rdev])
 AC_CHECK_FUNCS([gettimeofday select strdup strpbrk])
 
 AC_OUTPUT([
+    libfg2.h
     Makefile
     gtkcamera/Makefile
     gtkcamera/gtkcamera.pc

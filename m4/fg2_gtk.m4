@@ -9,8 +9,15 @@ AC_DEFUN([FG2_CHECK_GTK],
             PKG_CHECK_MODULES(
                 [gtk],
                 [gtk+-2.0],
-                [AC_DEFINE(WITH_GTK,1,[Define to 1 to use Gtk+])]
+                [
+                    AC_DEFINE(WITH_GTK,1,[Define to 1 to use Gtk+])
+                    have_gtk=1
+                ],
+                [
+                    have_gtk=0
+                ]
             )]
     )
+    AC_SUBST([have_gtk])
     AM_CONDITIONAL([WITH_GTK], [test "x$with_gtk" = "xyes"])
 ])

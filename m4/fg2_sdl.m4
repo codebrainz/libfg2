@@ -9,8 +9,15 @@ AC_DEFUN([FG2_CHECK_SDL],
             PKG_CHECK_MODULES(
                 [sdl],
                 [sdl],
-                [AC_DEFINE(WITH_SDL,1,[Define to 1 to use SDL])]
+                [
+                    AC_DEFINE(WITH_SDL,1,[Define to 1 to use SDL])
+                    have_sdl=1
+                ],
+                [
+                    have_sdl=0
+                ]
             )]
     )
+    AC_SUBST([have_sdl])
     AM_CONDITIONAL([WITH_SDL], [test "x$with_sdl" = "xyes"])
 ])

@@ -9,8 +9,15 @@ AC_DEFUN([FG2_CHECK_GDKPIXBUF],
             PKG_CHECK_MODULES(
                 [gdkpixbuf],
                 [gdk-pixbuf-2.0],
-                [AC_DEFINE(WITH_GDKPIXBUF,1,[Define to 1 to use GdkPixbuf])]
+                [
+                    AC_DEFINE(WITH_GDKPIXBUF,1,[Define to 1 to use GdkPixbuf])
+                    have_gdkpixbuf=1
+                ],
+                [
+                    have_gdkpixbuf=0
+                ]
             )]
     )
+    AC_SUBST([have_gdkpixbuf])
     AM_CONDITIONAL([WITH_GDKPIXBUF], [test "x$with_gdkpixbuf" = "xyes"])
 ])

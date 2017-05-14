@@ -1,0 +1,50 @@
+//==========================================================================
+//
+//  libfg2 - Frame Grabber interface for Linux - compatibility header
+//
+//--------------------------------------------------------------------------
+//
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU Lesser General Public
+//  License as published by the Free Software Foundation; either
+//  version 2.1 of the License, or (at your option) any later version.
+//
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  Lesser General Public License for more details.
+//
+//  You should have received a copy of the GNU Lesser General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
+//  or obtain a copy from the GNU website at http://www.gnu.org/
+//
+//==========================================================================
+
+#ifndef LIBFG2_H__COMPAT
+#define LIBFG2_H__COMPAT
+
+#include <libfg2/libfg2.h>
+
+#define FG_HAVE_GDKPIXBUF @have_gdkpixbuf@
+#define FG_HAVE_IMLIB2    @have_imlib2@
+#define FG_HAVE_OPENCV    @have_opencv@
+#define FG_HAVE_SDL       @have_sdl@
+
+#if FG_HAVE_GDKPIXBUF
+# include <libfg2/libfg2-gdkpixbuf.h>
+#endif
+
+#if FG_HAVE_IMLIB2
+# include <libfg2/libfg2-imlib2.h>
+#endif
+
+#if FG_HAVE_OPENCV
+# include <libfg2/libfg2-opencv.h>
+#endif
+
+#if FG_HAVE_SDL
+# include <libfg2/libfg2-sdl.h>
+#endif
+
+#endif // LIBFG2_H__COMPAT

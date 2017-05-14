@@ -64,6 +64,8 @@ ltmain.sh
 missing
 depcomp
 
+/libfg2.h
+
 *.pc
 m4/libtool.m4
 m4/lt*.m4

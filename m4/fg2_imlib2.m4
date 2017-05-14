@@ -9,8 +9,15 @@ AC_DEFUN([FG2_CHECK_IMLIB2],
             PKG_CHECK_MODULES(
                 [imlib2],
                 [imlib2],
-                [AC_DEFINE(WITH_IMLIB2,1,[Define to 1 to use Imlib2])]
+                [
+                    AC_DEFINE(WITH_IMLIB2,1,[Define to 1 to use Imlib2])
+                    have_imlib2=1
+                ],
+                [
+                    have_imlib2=0
+                ]
             )]
     )
+    AC_SUBST([have_imlib2])
     AM_CONDITIONAL([WITH_IMLIB2], [test "x$with_imlib2" = "xyes"])
 ])
