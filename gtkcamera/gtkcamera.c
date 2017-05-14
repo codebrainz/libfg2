@@ -155,7 +155,7 @@ on_idle (GtkCamera *self)
   if (pixbuf)
     {
       gtk_image_set_from_pixbuf (GTK_IMAGE (self), pixbuf);
-      gdk_pixbuf_unref (pixbuf);
+      g_object_unref (pixbuf);
       g_signal_emit_by_name (self, 
                              "new-frame", 
                              gtk_image_get_pixbuf (GTK_IMAGE (self)), 

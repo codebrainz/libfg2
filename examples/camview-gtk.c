@@ -18,7 +18,7 @@ static GOptionEntry entries[] = {
 };
 
 
-static on_new_frame(GtkCamera *camera, GdkPixbuf *pixbuf, gpointer data)
+static void on_new_frame(GtkCamera *camera, GdkPixbuf *pixbuf, gpointer data)
 {
   /* g_debug ("frame"); */
 }
