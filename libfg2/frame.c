@@ -17,18 +17,18 @@
 //
 //==========================================================================
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <libfg2/libfg2.h>
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 #include <assert.h>
 #include <time.h>
 #include <jpeglib.h>
-
-#ifdef HAVE_CONFIG_H
-#include "libfg2-config.h"
-#endif
-
-#include <libfg2/libfg2.h>
 
 //--------------------------------------------------------------------------
 

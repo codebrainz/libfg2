@@ -1,0 +1,12 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@/libfg2
+
+Name: @PACKAGE_NAME@-gdkpixbuf
+Description: GdkPixbuf format support for libfg2.
+Requires: libfg2
+Requires.private: gdk-pixbuf-2.0
+Version: @PACKAGE_VERSION@
+Libs: -L${libdir} -lfg2-gdkpixbuf
+Cflags: -I${includedir}

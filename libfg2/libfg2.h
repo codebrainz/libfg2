@@ -47,10 +47,6 @@ extern "C" {
 #include <linux/videodev2.h>
 #include <libv4l2.h>
 
-#ifdef HAVE_CONFIG_H
-#include "libfg2-config.h"
-#endif
-
 ///
 /// Standard/default device for fg_open().
 ///
@@ -1724,74 +1720,6 @@ fg_frame *fg_frame_clone(fg_frame *fr);
 ///         include writing to other types of files or drawing on the screen.
 ///
 int fg_frame_save(fg_frame* fr, const char* filename);
-#endif
-
-#ifdef WITH_SDL
-#include <SDL/SDL.h>
-///
-/// \brief Convert #fg_frame to an SDL_Surface.
-///
-/// This function creates an SDL_Surface whos data (pixels) points to the
-/// data for the #fg_frame.  If the frame is freed, the SDL_Surface's data is
-/// also freed, but not the SDL_Surface.  If the SDL_Surface is freed, the
-/// #fg_frame's data is not freed.
-///
-/// \param fr Frame to convert.
-///
-/// \return An SDL_Surface on success or NULL on error.
-///
-SDL_Surface *fg_frame_to_sdl_surface(fg_frame *fr);
-#endif
-
-#ifdef WITH_GDKPIXBUF
-#include <gdk-pixbuf/gdk-pixbuf.h>
-///
-/// \brief Convert #fg_frame to a GdkPixbuf.
-///
-/// This function creates a GdkPixbuf whos data points to the data for the
-/// #fg_frame.  If the frame is freed, the GdkPixbuf's data is also freed,
-/// but not the GdkPixbuf.  If the GdkPixbuf is freed, the #fg_frame's data
-/// is not freed.
-///
-/// \param  fr Frame to convert.
-///
-/// \return A GdkPixbuf on success or NULL on error.
-///
-GdkPixbuf *fg_frame_to_gdk_pixbuf(fg_frame *fr);
-#endif
-
-#ifdef WITH_IMLIB2
-#include <Imlib2.h>
-///
-/// \brief  Convert #fg_frame to an Imlib_Image.
-///
-/// This function creates an Imlib_Image with newly allocated data.  The image
-/// data pointed by the Imlib_Image must be freed before the Imlib_Image.
-/// Freeing the Imlib_Image will not free the data and you will lose the
-/// pointer to the data if it's not freed before hand.
-///
-/// \param fr Frame to convert.
-///
-/// \return An Imlib_Image on success or NULL on error.
-///
-Imlib_Image *fg_frame_to_imlib2_image(fg_frame *fr);
-#endif
-
-#ifdef WITH_OPENCV
-#include <cv.h>
-///
-/// \brief Convert #fg_frame to an IplImage.
-///
-/// This function creates an IplImage whos data points to the data for the
-/// #fg_frame.  If the frame is freed, the IplImage's data is also freed,
-/// but not the IplImage.  If the IplImage is freed, the #fg_frame's data is
-/// not freed.
-///
-/// \param fr Frame to convert.
-///
-/// \return An IplImage on success or NULL on error.
-///
-IplImage *fg_frame_to_ipl_image(fg_frame *fr);
 #endif
 
 /** @} */ // end of frame section

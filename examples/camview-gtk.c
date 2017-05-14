@@ -1,7 +1,6 @@
+#include <gtkcamera/gtkcamera.h>
 #include <stdlib.h>
 #include <gtk/gtk.h>
-
-#include "gtkcamera.h"
 
 
 static gchar *device = NULL;

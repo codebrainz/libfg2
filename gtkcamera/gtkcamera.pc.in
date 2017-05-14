@@ -1,11 +1,12 @@
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 libdir=@libdir@
-includedir=@includedir@
+includedir=@includedir@/gtkcamera
 
 Name: @PACKAGE_NAME@
 Description: Linux frame grabbing library.
-Requires.private: @PKGCONFIG_REQUIRES_PRIVATE@
+Requires: libfg2
+Requires.private: gtk+-2.0
 Version: @PACKAGE_VERSION@
-Libs: -L${libdir} -lfg2
+Libs: -L${libdir} -lgtkcamera
 Cflags: -I${includedir}

@@ -37,30 +37,18 @@ ehthumbs.db
 Icon?
 Thumbs.db
 
-# Shared dir
-share/*
-
-# New sub-projects
-src/gtkcamera
-src/pyfg2
-
 # Autotools stuff
 
 *~
 
 Makefile
 Makefile.in
-src/Makefile
-src/Makefile.in
 
 aclocal.m4
 autom4te.cache/
 
 compile
-config.guess
-config.log
-config.status
-config.sub
+config.*
 
 configure
 
@@ -73,10 +61,7 @@ ltmain.sh
 missing
 depcomp
 
-src/.deps
-src/.libs
-libfg2-config.*
-libfg2.pc
+*.pc
 m4/libtool.m4
 m4/lt*.m4
 

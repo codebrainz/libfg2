@@ -1,13 +1,13 @@
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <libfg2/libfg2.h>
+
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
 #include <linux/videodev2.h>
-
-#ifdef HAVE_CONFIG_H
-#include "libfg2-config.h"
-#endif
-
-#include <libfg2/libfg2.h>
 
 //--------------------------------------------------------------------------
 

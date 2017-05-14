@@ -19,8 +19,8 @@
  * MA 02110-1301, USA.
  */
 
-#include <libfg2/libfg2.h>
-#include "gtkcamera.h"
+#include <libfg2/libfg2-gdkpixbuf.h>
+#include <gtkcamera/gtkcamera.h>
 
 
 enum

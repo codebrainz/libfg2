@@ -2,7 +2,7 @@ AC_PREREQ([2.67])
 
 AC_INIT([libfg2], [0.1], [https://github.com/codebrainz/libfg2/issues])
 AC_CONFIG_MACRO_DIR([m4])
-AC_CONFIG_HEADERS([libfg2/libfg2-config.h])
+AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([foreign])
 AM_SILENT_RULES([yes])
 LT_INIT
@@ -11,9 +11,9 @@ AC_PROG_CC
 AC_PROG_SED
 
 AC_CHECK_HEADERS([asm/types.h assert.h dirent.h errno.h fcntl.h \
-                    linux/videodev2.h stdarg.h stdio.h stdlib.h string.h \
-                    sys/ioctl.h sys/stat.h sys/time.h sys/types.h syslog.h \
-                    time.h unistd.h])
+                    linux/videodev2.h stdarg.h stdint.h stdio.h stdlib.h \
+                    string.h sys/ioctl.h sys/stat.h sys/time.h sys/types.h \
+                    syslog.h time.h unistd.h])
 
 #-------------------------------------------------------------------------------
 # libv4l
@@ -32,14 +32,15 @@ AS_IF([test "x$with_libv4l" = "xyes"], [
 AM_CONDITIONAL([WITH_LIBV4L], [test "x$with_libv4l" = "xyes"])
 #-------------------------------------------------------------------------------
 # JPEG Library
-AC_ARG_WITH([jpeglib],
+AC_ARG_WITH([jpeg],
     AS_HELP_STRING([--without-jpeg], [do not build with support for JPEG format]),
     [with_jpeg=no],
     [with_jpeg=yes]
 )
 AS_IF([test "x$with_jpeg" = "xyes"], [
-        AC_CHECK_HEADER(
-            [jpeglib.h],
+        PKG_CHECK_MODULES(
+            [jpeg],
+            [libjpeg],
             [AC_DEFINE(WITH_JPEG,1,[Define to 1 to use JPEG library])]
         )]
 )
@@ -135,13 +136,6 @@ AC_ARG_WITH([vala],
     [with_vala=yes],
     [with_vala=no]
 )
-AS_IF([test "x$with_vala" = "xyes"], [
-    PKG_CHECK_MODULES(
-        [vala],
-        [vala-0.10],
-        [AC_DEFINE(WITH_VALA,1,[Define to 1 to use Vala])]
-    )]
-)
 AS_IF([test "x$with_vala" = "xyes"], [AM_PROG_VALAC([0.10])])
 AM_CONDITIONAL([WITH_VALA], [test "x$with_vala" = "xyes"])
 #-------------------------------------------------------------------------------
@@ -179,9 +173,13 @@ AC_CHECK_FUNCS([dup2 ftruncate gettimeofday memset munmap select strdup \
 
 AC_OUTPUT([
     Makefile
+    gtkcamera/Makefile
+    gtkcamera/gtkcamera.pc
     libfg2/Makefile
-    gtk/Makefile
-    python/Makefile
-    vala/Makefile
+    libfg2/libfg2-gdkpixbuf.pc
+    libfg2/libfg2-imlib2.pc
+    libfg2/libfg2-opencv.pc
+    libfg2/libfg2-sdl.pc
+    vapi/Makefile
     examples/Makefile
 ])

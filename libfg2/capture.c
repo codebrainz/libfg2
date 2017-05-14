@@ -17,6 +17,12 @@
 //
 //==========================================================================
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <libfg2/libfg2.h>
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -30,12 +36,6 @@
 #include <asm/types.h>
 #include <linux/videodev2.h>
 #include "libv4l2.h"
-
-#ifdef HAVE_CONFIG_H
-#include "libfg2-config.h"
-#endif
-
-#include <libfg2/libfg2.h>
 
 //--------------------------------------------------------------------------
 

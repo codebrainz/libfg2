@@ -1,9 +1,16 @@
+#if WITH_SDL
+using SDL;
+#endif
+
+#if WITH_GDKPIXBUF
+using Gdk;
+#endif
+
 [CCode (cheader_filename="libfg2/libfg2.h")]
 namespace Libfg2
 {
     [Compact]
-    [CCode (cname="fg_grabber", cprefix="fg_", lower_case_prefix="fg_",
-        free_function="fg_close")]
+    [CCode (cname="fg_grabber", cprefix="fg_", free_function="fg_close")]
     public class FrameGrabber
     {
         [CCode (cname="fg_open")]
@@ -57,8 +64,7 @@ namespace Libfg2
     }
 
     [Compact]
-    [CCode (cname="fg_frame", cprefix="fg_frame_",
-        lower_case_prefix="fg_frame_", free_function="fg_frame_free")]
+    [CCode (cname="fg_frame", cprefix="fg_frame_", free_function="fg_frame_free")]
     public class Frame
     {
         [CCode (cname="fg_frame_new")]
@@ -92,12 +98,12 @@ namespace Libfg2
         }
 
 #if WITH_SDL
-        using SDL;
+        [CCode(cheader_filename="libfg2/libfg2-sdl.h")]
         public SDL.Surface to_sdl_surface();
 #endif
 
 #if WITH_GDKPIXBUF
-        using Gdk;
+        [CCode(cheader_filename="libfg2/libfg2-gdkpixbuf.h")]
         public Gdk.Pixbuf to_gdk_pixbuf();
 #endif
     }
