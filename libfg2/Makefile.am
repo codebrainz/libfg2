@@ -4,10 +4,10 @@ AM_LDFLAGS = $(LIBV4L_LIBS) $(LIBJPEG_LIBS)
 
 lib_LTLIBRARIES = libfg2.la
 
-libfg2_la_SOURCES = capture.c frame.c control.c convert.h
+libfg2_la_SOURCES = capture.c control.c convert.h frame.c version.c
 
 libfg2includedir = $(includedir)/libfg2
-libfg2include_HEADERS = libfg2.h
+libfg2include_HEADERS = libfg2.h libfg2-version.h
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libfg2.pc

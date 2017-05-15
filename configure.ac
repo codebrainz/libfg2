@@ -37,6 +37,10 @@ AC_HEADER_MAJOR
 AC_CHECK_MEMBERS([struct stat.st_rdev])
 AC_CHECK_FUNCS([gettimeofday select strdup strpbrk])
 
+AC_SUBST([fg_major_version], [0])
+AC_SUBST([fg_minor_version], [1])
+AC_SUBST([fg_micro_version], [0])
+
 AC_OUTPUT([
     libfg2.h
     Makefile
@@ -49,6 +53,7 @@ AC_OUTPUT([
     libfg2/libfg2-opencv.pc
     libfg2/libfg2-sdl.pc
     libfg2/libfg2-sdl2.pc
+    libfg2/libfg2-version.h
     vapi/Makefile
     examples/Makefile
 ])

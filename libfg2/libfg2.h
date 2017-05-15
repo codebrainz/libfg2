@@ -43,6 +43,7 @@
 extern "C" {
 #endif
 
+#include <libfg2/libfg2-version.h>
 #include <sys/time.h>
 #include <linux/videodev2.h>
 #include <libv4l2.h>

@@ -77,6 +77,8 @@ snapshot.jpg
 
 doc/reference/
 
+/libfg2/libfg2-version.h
+
 examples/example
 examples/test
 examples/fg-udev
