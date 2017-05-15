@@ -193,7 +193,7 @@ char *fg_get_control_name(fg_grabber *fg, fg_control_id control_id)
         return NULL;
     }
 
-    return strdup(ctrl_info.name);
+    return strdup((const char*)ctrl_info.name);
 }
 
 //==============================================================================

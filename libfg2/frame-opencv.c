@@ -5,6 +5,9 @@
 #include <libfg2/libfg2-opencv.h>
 #include <libfg2/convert.h>
 
+// FIXME: where is this function defined now? opencv2 seems to have moved it
+extern void *iplMalloc(int);
+
 IplImage *fg_frame_to_ipl_image(fg_frame *fr)
 {
 

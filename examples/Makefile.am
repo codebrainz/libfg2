@@ -52,6 +52,7 @@ if WITH_VALA
 noinst_PROGRAMS += camsnap-vala
 camsnap_vala_SOURCES = camsnap-vala.vala
 camsnap_vala_VALAFLAGS = --vapidir=$(abs_top_srcdir)/vapi --pkg fg2
+camsnap_vala_CFLAGS = $(AM_CFLAGS) -w
 if WITH_SDL1
 camsnap_vala_VALAFLAGS += --define=WITH_SDL --pkg sdl
 else

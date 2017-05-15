@@ -15,6 +15,6 @@
 ///
 /// \return An Imlib_Image on success or NULL on error.
 ///
-Imlib_Image *fg_frame_to_imlib2_image(fg_frame *fr);
+Imlib_Image fg_frame_to_imlib2_image(fg_frame *fr);
 
 #endif /* LIBFG2_IMLIB2_H */

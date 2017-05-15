@@ -128,7 +128,7 @@ int test_fg_set_format(void)
         int result = fg_set_format(fg, formats[i]);
 
         assert(result == 0);
-        assert(fg->format.fmt.pix.pixelformat == formats[i]);
+        assert((int)fg->format.fmt.pix.pixelformat == formats[i]);
     }
 
     fg_close(fg);
@@ -153,7 +153,7 @@ int test_fg_get_format(void)
         fg_set_format(fg, formats[i]);
         int result = fg_get_format(fg);
         assert(result == formats[i]);
-        assert(fg->format.fmt.pix.pixelformat == formats[i]);
+        assert((int)fg->format.fmt.pix.pixelformat == formats[i]);
     }
 
     fg_close(fg);
@@ -185,7 +185,7 @@ int test_fg_get_input_count(void)
     return 0;
 }
 
-int main(int argc, char *argv[])
+int main()
 {
     print_result("fg_open()", test_fg_open());
     print_result("fg_close()", test_fg_close());
