@@ -3,6 +3,7 @@
 rm -vrf \
     autom4te.cache/ \
     build-aux/ \
+    doc/reference/ \
     examples/.deps/ \
     examples/.libs/ \
     gtkcamera/.deps/ \
@@ -35,10 +36,12 @@ rm -vf \
     gtkcamera/*.pc \
     gtkcamera/Makefile \
     gtkcamera/Makefile.in \
+    libfg2.h \
     libfg2/*.o \
     libfg2/*.lo \
     libfg2/*.la \
     libfg2/*.pc \
+    libfg2/libfg2-version.h \
     libfg2/Makefile \
     libfg2/Makefile.in \
     m4/libtool.m4 \
