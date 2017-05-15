@@ -2,7 +2,7 @@
 #define LIBFG2_SDL_H
 
 #include <libfg2/libfg2.h>
-#include <SDL/SDL.h>
+#include <SDL.h>
 
 ///
 /// \brief Convert #fg_frame to an SDL_Surface.

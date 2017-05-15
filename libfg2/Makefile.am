@@ -60,11 +60,26 @@ libfg2include_HEADERS += libfg2-opencv.h
 pkgconfig_DATA += libfg2-opencv.pc
 endif
 
-if WITH_SDL
+if WITH_SDL1
 lib_LTLIBRARIES += libfg2-sdl.la
 libfg2_sdl_la_SOURCES = frame-sdl.c
-libfg2_sdl_la_CFLAGS = $(AM_CFLAGS) $(SDL_CFLAGS)
-libfg2_sdl_la_LDFLAGS = $(AM_LDFLAGS) $(SDL_LIBS)
-libfg2include_HEADERS += libfg2-sdl.h
+libfg2_sdl_la_CFLAGS = $(AM_CFLAGS) $(SDL1_CFLAGS)
+libfg2_sdl_la_LDFLAGS = $(AM_LDFLAGS) $(SDL1_LIBS)
 pkgconfig_DATA += libfg2-sdl.pc
+endif
+
+if WITH_SDL2
+lib_LTLIBRARIES += libfg2-sdl2.la
+libfg2_sdl2_la_SOURCES = frame-sdl.c
+libfg2_sdl2_la_CFLAGS = $(AM_CFLAGS) $(SDL2_CFLAGS)
+libfg2_sdl2_la_LDFLAGS = $(AM_LDFLAGS) $(SDL2_LIBS)
+pkgconfig_DATA += libfg2-sdl2.pc
+endif
+
+if WITH_SDL1
+libfg2include_HEADERS += libfg2-sdl.h
+else
+if WITH_SDL2
+libfg2include_HEADERS += libfg2-sdl.h
+endif
 endif

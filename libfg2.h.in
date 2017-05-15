@@ -29,7 +29,7 @@
 #define FG_HAVE_GDKPIXBUF @have_gdkpixbuf@
 #define FG_HAVE_IMLIB2    @have_imlib2@
 #define FG_HAVE_OPENCV    @have_opencv@
-#define FG_HAVE_SDL       @have_sdl@
+#define FG_HAVE_SDL1      @have_sdl1@
 
 #if FG_HAVE_GDKPIXBUF
 # include <libfg2/libfg2-gdkpixbuf.h>
@@ -43,7 +43,7 @@
 # include <libfg2/libfg2-opencv.h>
 #endif
 
-#if FG_HAVE_SDL
+#if FG_HAVE_SDL1
 # include <libfg2/libfg2-sdl.h>
 #endif
 

@@ -85,6 +85,7 @@ examples/camsnap.c
 examples/camsnap-vala
 examples/camview-gtk2
 examples/camview-gtk3
-examples/camview-sdl
+examples/camview-sdl1
+examples/camview-sdl2
 examples/camsnap-vala.c
 examples/camsnap_vala_vala.stamp

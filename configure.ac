@@ -27,7 +27,8 @@ FG2_CHECK_LIBJPEG
 FG2_CHECK_LIBV4L
 FG2_CHECK_OPENCV
 FG2_CHECK_PYTHON
-FG2_CHECK_SDL
+FG2_CHECK_SDL1
+FG2_CHECK_SDL2
 FG2_CHECK_VALA
 
 AC_TYPE_MODE_T
@@ -47,6 +48,7 @@ AC_OUTPUT([
     libfg2/libfg2-imlib2.pc
     libfg2/libfg2-opencv.pc
     libfg2/libfg2-sdl.pc
+    libfg2/libfg2-sdl2.pc
     vapi/Makefile
     examples/Makefile
 ])

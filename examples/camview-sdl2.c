@@ -4,7 +4,7 @@
 
 #include <libfg2/libfg2-sdl.h>
 #include <string.h>
-#include <SDL/SDL.h>
+#include <SDL.h>
 
 int main(int argc, char *argv[])
 {
@@ -12,7 +12,9 @@ int main(int argc, char *argv[])
     int quit = 0;
 
     SDL_Surface *frame;
-    SDL_Surface *screen;
+    SDL_Window *win;
+    SDL_Renderer *renderer;
+    SDL_Texture *texture;
     SDL_Event event;
 
     fg_grabber *fg;
@@ -26,11 +28,16 @@ int main(int argc, char *argv[])
     fr = fg_frame_new(fg);
 
     SDL_Init(SDL_INIT_VIDEO);
-    screen = SDL_SetVideoMode(fr->size.width, fr->size.height, 32,
-        SDL_SWSURFACE|SDL_SRCALPHA);
 
-    snprintf(wind_title, 255, "CamView SDL - %s", fg->device);
-    SDL_WM_SetCaption(wind_title, "CamView");
+    snprintf(wind_title, 255, "CamView SDL2 - %s", fg->device);
+    
+    win = SDL_CreateWindow(wind_title,
+        SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
+        fr->size.width, fr->size.height, 
+        SDL_WINDOW_SHOWN);
+    
+    renderer = SDL_CreateRenderer(win, -1,
+        SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
     while (quit == 0)
     {
@@ -47,15 +54,19 @@ int main(int argc, char *argv[])
         fg_grab_frame(fg, fr);
         frame = fg_frame_to_sdl_surface(fr);
 
-        SDL_BlitSurface(frame, NULL, screen, NULL);
-        SDL_Flip(screen);
-
+        texture = SDL_CreateTextureFromSurface(renderer, frame);
         SDL_FreeSurface(frame);
+    
+        SDL_RenderClear(renderer);
+        SDL_RenderCopy(renderer, texture, NULL, NULL);
+        SDL_RenderPresent(renderer);
 
+        SDL_DestroyTexture(texture);
     }
 
     fg_frame_release(fr);
-    SDL_FreeSurface(screen);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(win);
     SDL_Quit();
     fg_close(fg);
 
