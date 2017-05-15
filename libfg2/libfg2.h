@@ -1,9 +1,9 @@
 /*! \file libfg2.h
-    \mainpage 	libfg2
-    \version	0.01
-    \author	    Matthew Brush <mbrush@leftclick.ca>
-    \date	    Oct 28, 2010
-    \brief      Frame Grabber interface for Linux
+    \mainpage libfg2
+    \version  0.01
+    \author   Matthew Brush <mbrush@leftclick.ca>
+    \date     May 14, 2017
+    \brief    Frame Grabber interface for Linux
 */
 //==========================================================================
 //
