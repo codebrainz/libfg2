@@ -22,8 +22,10 @@ rm -vf \
     examples/camsnap-vala \
     examples/camsnap-vala.c \
     examples/*.stamp \
-    examples/camview-gtk \
-    examples/camview-sdl \
+    examples/camview-gtk2 \
+    examples/camview-gtk3 \
+    examples/camview-sdl1 \
+    examples/camview-sdl2 \
     examples/Makefile \
     examples/Makefile.in \
     examples/test \
