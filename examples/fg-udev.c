@@ -87,11 +87,9 @@ int is_frame_grabber(const char *fn)
  */
 int next_dev_index(void)
 {
-    int i, n, id;
+    int n;
     int used_ids[256] = {0};
-    char fn[NAME_MAX] = {0};
     char match_fn[NAME_MAX] = {0};
-    char *id_str;
     struct dirent **namelist;
     
     // Flag each used id in used_ids array.
@@ -105,6 +103,7 @@ int next_dev_index(void)
     {
         while (n--)
         {
+            char fn[NAME_MAX] = {0};
             snprintf(fn, NAME_MAX-1, "%s/%s", DEV_DIR, 
                 namelist[n]->d_name);
                 
@@ -112,10 +111,11 @@ int next_dev_index(void)
             {
                 if (strstr(fn, match_fn) != NULL)
                 {
-                    id_str = strpbrk(fn, "0123456789");
+                    char *id_str = strpbrk(fn, "0123456789");
                     if (id_str != NULL)
                     {
-                        id = atoi(id_str);
+                        int id = atoi(id_str);
+                        assert(id >= 0 && id < 256);
                         used_ids[id] = 1;
                     }
                 }
@@ -126,7 +126,7 @@ int next_dev_index(void)
     }
     
     // Find the first available id.
-    for (i=0; i < 256; i++)
+    for (int i=0; i < 256; i++)
     {
         if (!used_ids[i])
             return i;

@@ -8,10 +8,10 @@ static inline int rgb24_to_rgb32(unsigned char *src, int src_len,
 {
     int num_pixels = src_len / 3;
     register int i;
-    register uint32_t a,r,g,b;
 
     for (i=0; i < num_pixels; i++)
     {
+        register uint32_t a,r,g,b;
         a = 0;
         r = *src++;
         g = *src++;

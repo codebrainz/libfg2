@@ -104,7 +104,7 @@ void fg_debug_frame(fg_frame *fr, FILE *fp)
         fp = stdout;
 
     fprintf(fp, "fg_debug_frame():\n");
-    fprintf(fp, "  size:        %d x %d pixels\n",
+    fprintf(fp, "  size:        %u x %u pixels\n",
                 fr->size.width, fr->size.height);
     fprintf(fp, "  rowstride:   %d bytes\n", fr->rowstride);
     fprintf(fp, "  data length: %d bytes\n", fr->length);
