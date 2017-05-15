@@ -39,9 +39,9 @@
 #ifndef LIBFG2_H
 #define LIBFG2_H
 
-#ifdef __cplusplus__
+#ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus__ */
+#endif
 
 #include <sys/time.h>
 #include <linux/videodev2.h>
@@ -1724,8 +1724,8 @@ int fg_frame_save(fg_frame* fr, const char* filename);
 
 /** @} */ // end of frame section
 
-#ifdef __cplusplus__
-}
-#endif /* __cplusplus__ */
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
 
 #endif /* LIBFG2_H */
