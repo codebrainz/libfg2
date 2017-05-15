@@ -1,6 +1,6 @@
 AC_PREREQ([2.67])
 
-AC_INIT([libfg2], [0.1], [https://github.com/codebrainz/libfg2/issues])
+AC_INIT([libfg2], [0.2], [https://github.com/codebrainz/libfg2/issues])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
@@ -38,7 +38,7 @@ AC_CHECK_MEMBERS([struct stat.st_rdev])
 AC_CHECK_FUNCS([gettimeofday select strdup strpbrk])
 
 AC_SUBST([fg_major_version], [0])
-AC_SUBST([fg_minor_version], [1])
+AC_SUBST([fg_minor_version], [2])
 AC_SUBST([fg_micro_version], [0])
 
 AC_OUTPUT([
