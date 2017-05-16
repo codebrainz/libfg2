@@ -1,6 +1,6 @@
 AC_PREREQ([2.67])
 
-AC_INIT([libfg2], [0.2], [https://github.com/codebrainz/libfg2/issues])
+AC_INIT([libfg2], [0.3], [https://github.com/codebrainz/libfg2/issues])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
@@ -66,7 +66,7 @@ AM_CONDITIONAL([WITH_EXAMPLES], [test "x$enable_examples" != "xno"])
 # Substitute version info to output files
 #
 AC_SUBST([major_version], [0])
-AC_SUBST([minor_version], [2])
+AC_SUBST([minor_version], [3])
 AC_SUBST([micro_version], [0])
 
 #
