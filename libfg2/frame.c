@@ -28,7 +28,10 @@
 #include <stdio.h>
 #include <assert.h>
 #include <time.h>
-#include <jpeglib.h>
+
+#if FG_JPEG_SUPPORT
+# include <jpeglib.h>
+#endif
 
 //--------------------------------------------------------------------------
 
@@ -140,7 +143,7 @@ int fg_frame_get_size( fg_frame* fr )
 }
 
 //--------------------------------------------------------------------------
-#ifdef WITH_JPEG
+#if FG_JPEG_SUPPORT
 int fg_frame_save( fg_frame* fr, const char* filename )
 {
 

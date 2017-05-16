@@ -1,4 +1,4 @@
-#include <libfg2/libfg2-version.h>
+#include <libfg2/libfg2.h>
 
 const int fg_major_version = FG_MAJOR_VERSION;
 const int fg_minor_version = FG_MINOR_VERSION;

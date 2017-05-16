@@ -4,17 +4,16 @@ libfg2 - Simple Linux Video Capture Library
 Introduction
 ------------
 
-Libfg2 is a C library which provides access to video input devices such as
-frame grabber cards, webcams, and TV tuner devices under kernels which support
-Video4Linux2.  Using the excellent libv4l library, libfg2 provides access to
-most devices, independent of which pixel formats they use.  Libfg2 also
-provides functions to convert video frames to popular in-memory formats such
-as those used by Gtk+, SDL, Imlib2, and OpenCV.
+Libfg2 is a C library which provides access to video input devices such 
+as frame grabber cards, webcams, and TV tuner devices under kernels 
+which support Video4Linux2.  Using the excellent libv4l library, libfg2 
+provides access to most devices, independent of which pixel formats 
+they use.
 
-The library began with me hacking on the libfg library to support the
-Video4Linux2 API.  I just started going through each function modifying each
-one to work with V4L2, renaming a few things along the way, and Libfg2 is the
-result.
+The library began with me hacking on the libfg library to support the 
+Video4Linux2 API.  I just started going through each function modifying 
+each one to work with V4L2, renaming a few things along the way, and 
+Libfg2 is the result.
 
 Example
 -------
@@ -71,46 +70,24 @@ To checkout, build and install libfg2 you'll need to do the following:
 Dependencies
 ------------
 
-Libfg2 supports compiling with different dependencies, the defaults and
-recommended ones being:
+Libfg2 has two dependencies, one required and one option.
 
-* [LibV4L](http://people.atrpms.net/~hdegoede) - For better device support
-* [JPEG Library](http://ijg.org) - For saving frames to file
+### Required
 
-Non-default dependencies used for converting to other formats include:
+* [LibV4L](http://people.atrpms.net/~hdegoede)
 
-* [GdkPixbuf](http://developer.gnome.org/gdk-pixbuf/unstable/rn01.html)
-* [Imlib2](http://docs.enlightenment.org/api/imlib2/html)
-* [OpenCV](http://opencv.willowgarage.com/wiki)
-* [LibSDL](http://www.libsdl.org)
+### Optional
 
-For generating language bindings in Python and Vala, respectively:
+Only required for saving frames to file.
 
-* [Python 2.6+](http://www.python.org)
-* [Vala 0.10+](http://live.gnome.org/Vala)
+* [JPEG Library](http://ijg.org)
 
-Additionally, the GTK+ widget named GtkCamera, depends on:
+See `./configure --help` for more information on configuring the library.
 
-* [GTK+ 2.16+](http://www.gtk.org)
+Using Ubuntu, both dependencies can be installed using the following 
+command (only tested on Ubuntu 16.04):
 
-None of the above dependencies above are required, the only absolute
-requirement is support for the Video4Linux 2 API.  See ./configure --help
-for more information on compiling the library.
-
-Using Ubuntu, all of the dependencies can be installed using the following
-command (only tested on Ubuntu 10.10):
-
-    $ sudo apt-get install \
-        libv4l-dev \
-        libjpeg-dev \
-        libgdk-pixbuf2.0-dev \
-        libimlib2-dev \
-        libcv-dev \
-        libhighgui-dev \
-        libsdl1.2-dev \
-        python-dev \
-        libvala-0.10-dev \
-        libgtk2.0-dev
+    $ sudo apt-get install libv4l-dev libjpeg-dev
 
 Other distributions should have equivalent packages available.
 
@@ -127,15 +104,15 @@ To generate API documentation in PDF format, use above commands then:
     $ cd reference/latex
     $ make pdf
 
-To generate the documentation, you will need
-[Doxygen](http://www.stack.nl/~dimitri/doxygen).  Eventually the
-documentation generation will be integrated into the Autotools build system
-and available online.
+To generate the documentation, you will need 
+[Doxygen](http://www.stack.nl/~dimitri/doxygen).  Eventually the 
+documentation generation will be integrated into the Autotools build 
+system and available online.
 
 License
 -------
 
 Libfg2 is licensed under the
-[GNU Lesser General Public License](http://www.gnu.org/copyleft/lesser.html),
+[GNU Lesser General Public License](https://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html),
 see the
-[COPYING file](https://github.com/codebrainz/libfg2/blob/master/COPYING).
+[COPYING.md file](https://github.com/codebrainz/libfg2/blob/master/COPYING).
