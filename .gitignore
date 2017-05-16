@@ -64,8 +64,6 @@ ltmain.sh
 missing
 depcomp
 
-/libfg2.h
-
 *.pc
 m4/libtool.m4
 m4/lt*.m4
@@ -75,19 +73,6 @@ snapshot.jpg
 .deps/
 .libs/
 
-doc/reference/
-
-/libfg2/libfg2-version.h
-
-examples/example
-examples/test
-examples/fg-udev
-examples/camsnap
-examples/camsnap.c
-examples/camsnap-vala
-examples/camview-gtk2
-examples/camview-gtk3
-examples/camview-sdl1
-examples/camview-sdl2
-examples/camsnap-vala.c
-examples/camsnap_vala_vala.stamp
+/doc/reference/
+/examples/test
+/libfg2/libfg2.h

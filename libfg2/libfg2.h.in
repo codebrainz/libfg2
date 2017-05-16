@@ -1,8 +1,8 @@
 /*! \file libfg2.h
     \mainpage libfg2
-    \version  0.01
+    \version  @PACKAGE_VERSION@
     \author   Matthew Brush <mbrush@leftclick.ca>
-    \date     May 14, 2017
+    \date     May 15, 2017
     \brief    Frame Grabber interface for Linux
 */
 //==========================================================================
@@ -43,10 +43,30 @@
 extern "C" {
 #endif
 
-#include <libfg2/libfg2-version.h>
-#include <sys/time.h>
-#include <linux/videodev2.h>
 #include <libv4l2.h>
+#include <linux/videodev2.h>
+#include <sys/time.h>
+
+///
+/// Version information
+///
+
+#define FG_MAJOR_VERSION @major_version@
+#define FG_MINOR_VERSION @minor_version@
+#define FG_MICRO_VERSION @micro_version@
+
+#define FG_CHECK_VERSION(Maj, Min, Mac) ( \
+    ((Maj) > FG_MAJOR_VERSION) || \
+    ((Maj) == FG_MAJOR_VERSION && (Min) > FG_MINOR_VERSION) || \
+    ((Maj) == FG_MAJOR_VERSION && (Min) == FG_MINOR_VERSION && (Mic) >= FG_MICRO_VERSION))
+
+extern const int fg_major_version;
+extern const int fg_minor_version;
+extern const int fg_micro_version;
+
+int fg_check_version(int maj, int min, int mic);
+
+#define FG_JPEG_SUPPORT @with_jpeg@
 
 ///
 /// Standard/default device for fg_open().
@@ -1703,7 +1723,7 @@ fg_frame *fg_frame_clone(fg_frame *fr);
 
 //------------------------------------------------------------------------------
 
-#ifdef WITH_JPEG
+#if FG_JPEG_SUPPORT
 /// \brief  Save a frame as a JPEG file.
 ///
 /// This function uses jpeglib to save the image in an fg_frame to a JPEG
